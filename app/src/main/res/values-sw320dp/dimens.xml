@@ -1,0 +1,35 @@
+<resources>
+    <dimen name="actionbar_height">45dp</dimen>
+    <dimen name="ac_imv_size">16dp</dimen>
+
+    <dimen name="txt_7sp">7sp</dimen>
+    <dimen name="txt_8sp">8sp</dimen>
+    <dimen name="txt_10sp">9sp</dimen>
+    <dimen name="txt_12sp">11sp</dimen>
+    <dimen name="txt_15sp">14sp</dimen>
+    <dimen name="txt_18sp">17sp</dimen>
+    <dimen name="txt_22sp">21sp</dimen>
+    <dimen name="txt_26sp">25sp</dimen>
+    <dimen name="txt_32sp">31sp</dimen>
+    <dimen name="txt_title">17sp</dimen>
+
+    <dimen name="dm_1dp">1dp</dimen>
+    <dimen name="dm_2dp">2dp</dimen>
+    <dimen name="dm_3dp">3dp</dimen>
+    <dimen name="dm_4dp">4dp</dimen>
+    <dimen name="dm_5dp">5dp</dimen>
+    <dimen name="dm_10dp">9dp</dimen>
+    <dimen name="dm_12dp">11dp</dimen>
+    <dimen name="dm_15dp">14dp</dimen>
+    <dimen name="dm_20dp">18dp</dimen>
+    <dimen name="dm_30dp">27dp</dimen>
+    <dimen name="dm_40dp">36dp</dimen>
+    <dimen name="dm_50dp">45dp</dimen>
+    <dimen name="dm_60dp">54dp</dimen>
+    <dimen name="dm_70dp">63dp</dimen>
+    <dimen name="dm_80dp">72dp</dimen>
+    <dimen name="dm_90dp">80dp</dimen>
+    <dimen name="dm_100dp">90dp</dimen>
+    <dimen name="dm_150dp">140dp</dimen>
+    <dimen name="dm_200dp">185dp</dimen>
+</resources>

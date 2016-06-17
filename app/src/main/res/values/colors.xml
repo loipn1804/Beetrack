@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="transparent_white_30">#4dffffff</color>
+    <color name="transparent_white_50">#80ffffff</color>
+    <color name="transparent_white_60">#99ffffff</color>
+    <color name="transparent_white_90">#e6ffffff</color>
+    <color name="black_trans_50">#80000000</color>
+    <color name="black_trans_30">#4d000000</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="white_hint">#e1e1e1</color>
+    <color name="white_press">#f4f4f4</color>
+    <color name="black_77">#777777</color>
+
+    <color name="txt_black_99">#999999</color>
+    <color name="txt_black_77">#777777</color>
+    <color name="txt_black_55">#555555</color>
+    <color name="txt_black_55_hint">#c1c1c1</color>
+    <color name="txt_black_33">#333333</color>
+    <color name="txt_black_96">#969696</color>
+    <color name="txt_black">#000000</color>
+    <color name="txt_label">#acacac</color>
+    <color name="txt_menu">#333333</color>
+
+    <drawable name="divider">#999999</drawable>
+    <drawable name="text_background">#FFFFFF</drawable>
+    <drawable name="table_background">#444444</drawable>
+    <drawable name="image_view_background">#999999</drawable>
+
+    <color name="main_color">#f7921e</color>
+    <color name="main_color_press">#e57f09</color>
+
+    <color name="gray_login">#f4f4f5</color>
+    <color name="gray_stroke_login">#b7b7b7</color>
+    <color name="divider">#d7d7d7</color>
+</resources>
