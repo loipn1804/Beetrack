@@ -4,6 +4,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/lnlSession"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/main_color"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtSessionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dm_5dp"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dm_5dp"
+            android:paddingRight="@dimen/dm_5dp"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="@dimen/dm_15dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dm_2dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_arrow_down_white_2" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"

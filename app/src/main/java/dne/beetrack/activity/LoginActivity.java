@@ -1,6 +1,7 @@
 package dne.beetrack.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -8,7 +9,15 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import dne.beetrack.R;
+import dne.beetrack.connection.Executor;
+import dne.beetrack.connection.callback.UICallback;
+import dne.beetrack.daocontroller.UserController;
+import dne.beetrack.view.SimpleToast;
+import greendao.User;
 
 /**
  * Created by USER on 06/20/2016.
@@ -53,7 +62,15 @@ public class LoginActivity extends MyBaseActivity implements View.OnClickListene
     }
 
     private void initData() {
-
+        if (UserController.isLogin(this)) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
+            String email = preferences.getString("email", "");
+            edtEmail.setText(email);
+        }
     }
 
     @Override
@@ -68,9 +85,46 @@ public class LoginActivity extends MyBaseActivity implements View.OnClickListene
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void login() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        final String username = edtEmail.getText().toString().trim();
+        String password = edtPassword.getText().toString().trim();
+        if (username.isEmpty()) {
+            showToastError(getString(R.string.blank_username));
+            return;
+        } else if (password.isEmpty()) {
+            showToastError(getString(R.string.blank_password));
+            return;
+        }
+        UICallback callback = new UICallback() {
+            @Override
+            public void onSuccess(String message) {
+                showToastOk(message);
+                hideProgressDialog();
+                saveEmail(username);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onFail(String error) {
+                showToastError(error);
+                hideProgressDialog();
+            }
+        };
+        Executor.login(this, callback, username, password);
+        showProgressDialog(false);
+    }
+
+    private void saveEmail(String email) {
+        SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("email", email);
+        editor.commit();
     }
 }

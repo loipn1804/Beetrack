@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import dne.beetrack.R;
+import dne.beetrack.daocontroller.UserController;
 import dne.beetrack.fragment.AssetFragment;
 import dne.beetrack.fragment.ReportFragment;
 import dne.beetrack.fragment.ScanFragment;
@@ -94,10 +95,16 @@ public class MainActivity extends MyBaseActivity implements View.OnClickListener
                 else showToastInfo("already");
                 break;
             case R.id.lnlExit:
-                Intent intent = new Intent(this, SamplePrintActivity.class);
-                startActivity(intent);
+                logout();
                 break;
         }
+    }
+
+    private void logout() {
+        UserController.clearAll(this);
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void switchFragment(int fragment) {

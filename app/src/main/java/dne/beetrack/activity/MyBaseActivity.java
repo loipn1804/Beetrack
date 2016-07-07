@@ -17,10 +17,22 @@ import dne.beetrack.view.SimpleToast;
 public class MyBaseActivity extends AppCompatActivity {
 
     private Dialog progress_dialog = null;
+    private boolean isDestroy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isDestroy = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isDestroy = true;
+    }
+
+    protected boolean isDestroy() {
+        return isDestroy;
     }
 
     public void showProgressDialog(boolean cancelable) {

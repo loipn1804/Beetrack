@@ -6,6 +6,11 @@
     <string name="report">Báo cáo</string>
     <string name="exit">Thoát</string>
 
+    <string name="no_internet">No internet, please check your connection!</string>
+
+    <string name="blank_username">Bạn chưa nhập username</string>
+    <string name="blank_password">Bạn chưa nhập password</string>
+
 
     <!--printer-->
     <string name="menu_settings">Settings</string>
