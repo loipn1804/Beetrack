@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import dne.beetrack.R;
+import dne.beetrack.daocontroller.AssetController;
+import dne.beetrack.daocontroller.SessionController;
 import dne.beetrack.daocontroller.UserController;
 import dne.beetrack.fragment.AssetFragment;
 import dne.beetrack.fragment.ReportFragment;
@@ -102,6 +104,8 @@ public class MainActivity extends MyBaseActivity implements View.OnClickListener
 
     private void logout() {
         UserController.clearAll(this);
+        SessionController.clearAll(this);
+        AssetController.clearAll(this);
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

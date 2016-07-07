@@ -12,7 +12,7 @@ import dne.beetrack.R;
 /**
  * Created by USER on 06/16/2016.
  */
-public class ReportFragment extends Fragment implements View.OnClickListener {
+public class ReportFragment extends MyBaseFragment implements View.OnClickListener {
 
     @Nullable
     @Override

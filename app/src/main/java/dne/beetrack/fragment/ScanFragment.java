@@ -3,21 +3,32 @@ package dne.beetrack.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import dne.beetrack.R;
-import dne.beetrack.activity.MyBaseActivity;
+import dne.beetrack.connection.Executor;
+import dne.beetrack.connection.callback.UICallback;
+import dne.beetrack.daocontroller.AssetController;
+import dne.beetrack.daocontroller.UserController;
+import greendao.Asset;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
 /**
  * Created by USER on 06/16/2016.
  */
-public class ScanFragment extends Fragment implements View.OnClickListener, ZBarScannerView.ResultHandler {
+public class ScanFragment extends MyBaseFragment implements View.OnClickListener, ZBarScannerView.ResultHandler {
 
     private ZBarScannerView mScannerView;
     private FrameLayout frameLayout;
@@ -67,12 +78,72 @@ public class ScanFragment extends Fragment implements View.OnClickListener, ZBar
 
     @Override
     public void handleResult(Result result) {
-        ((MyBaseActivity) getActivity()).showToastInfo(result.getContents());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mScannerView.resumeCameraPreview(ScanFragment.this);
+        Asset asset = AssetController.getByBarcode(getActivity(), result.getContents());
+        if (asset != null) {
+            if (asset.getStatus() == 1) {
+                showToastError(getString(R.string.asset_scan_already));
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScannerView.resumeCameraPreview(ScanFragment.this);
+                    }
+                }, 2000);
+            } else {
+                doScan(asset);
             }
-        }, 2000);
+        } else {
+            showToastError(getString(R.string.barcode_not_found));
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mScannerView.resumeCameraPreview(ScanFragment.this);
+                }
+            }, 2000);
+        }
+    }
+
+    private void doScan(final Asset asset) {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = calendar.getTime();
+        String scan_date = format.format(date);
+
+        JSONArray array = new JSONArray();
+        JSONObject object = new JSONObject();
+        try {
+            object.put("asset_id", asset.getAsset_id());
+            object.put("session_id", asset.getSession_id());
+            object.put("note", "");
+            object.put("scan_date", scan_date);
+            object.put("status", 1);
+
+            array.put(object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        UICallback callback = new UICallback() {
+            @Override
+            public void onSuccess(String message) {
+                showToastOk(message);
+                hideProgressDialog();
+                asset.setStatus(1);
+                AssetController.insertOrUpdate(getActivity(), asset);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mScannerView.resumeCameraPreview(ScanFragment.this);
+                    }
+                }, 2000);
+            }
+
+            @Override
+            public void onFail(String error) {
+                showToastError(error);
+                hideProgressDialog();
+            }
+        };
+        Executor.doScan(getActivity(), callback, UserController.getCurrentUser(getActivity()).getAccount_id(), array.toString());
+        showProgressDialog(false);
     }
 }

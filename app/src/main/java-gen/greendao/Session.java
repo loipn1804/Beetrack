@@ -14,7 +14,7 @@ public class Session {
     private String session_date;
     private String created_at;
     private String updated_at;
-    private Boolean is_chosen;
+    private Integer is_chosen;
 
     public Session() {
     }
@@ -23,7 +23,7 @@ public class Session {
         this.session_id = session_id;
     }
 
-    public Session(Long session_id, Long account_id, Long company_id, String name, String description, String session_date, String created_at, String updated_at, Boolean is_chosen) {
+    public Session(Long session_id, Long account_id, Long company_id, String name, String description, String session_date, String created_at, String updated_at, Integer is_chosen) {
         this.session_id = session_id;
         this.account_id = account_id;
         this.company_id = company_id;
@@ -99,11 +99,11 @@ public class Session {
         this.updated_at = updated_at;
     }
 
-    public Boolean getIs_chosen() {
+    public Integer getIs_chosen() {
         return is_chosen;
     }
 
-    public void setIs_chosen(Boolean is_chosen) {
+    public void setIs_chosen(Integer is_chosen) {
         this.is_chosen = is_chosen;
     }
 

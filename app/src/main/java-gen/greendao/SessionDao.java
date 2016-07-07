@@ -31,7 +31,7 @@ public class SessionDao extends AbstractDao<Session, Long> {
         public final static Property Session_date = new Property(5, String.class, "session_date", false, "SESSION_DATE");
         public final static Property Created_at = new Property(6, String.class, "created_at", false, "CREATED_AT");
         public final static Property Updated_at = new Property(7, String.class, "updated_at", false, "UPDATED_AT");
-        public final static Property Is_chosen = new Property(8, Boolean.class, "is_chosen", false, "IS_CHOSEN");
+        public final static Property Is_chosen = new Property(8, Integer.class, "is_chosen", false, "IS_CHOSEN");
     };
 
 
@@ -109,9 +109,9 @@ public class SessionDao extends AbstractDao<Session, Long> {
             stmt.bindString(8, updated_at);
         }
  
-        Boolean is_chosen = entity.getIs_chosen();
+        Integer is_chosen = entity.getIs_chosen();
         if (is_chosen != null) {
-            stmt.bindLong(9, is_chosen ? 1l: 0l);
+            stmt.bindLong(9, is_chosen);
         }
     }
 
@@ -133,7 +133,7 @@ public class SessionDao extends AbstractDao<Session, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // session_date
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // created_at
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // updated_at
-            cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0 // is_chosen
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8) // is_chosen
         );
         return entity;
     }
@@ -149,7 +149,7 @@ public class SessionDao extends AbstractDao<Session, Long> {
         entity.setSession_date(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setCreated_at(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setUpdated_at(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setIs_chosen(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
+        entity.setIs_chosen(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
      }
     
     /** @inheritdoc */

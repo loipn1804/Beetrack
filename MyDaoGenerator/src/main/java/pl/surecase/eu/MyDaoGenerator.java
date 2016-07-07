@@ -31,7 +31,26 @@ public class MyDaoGenerator {
         session.addStringProperty("session_date");
         session.addStringProperty("created_at");
         session.addStringProperty("updated_at");
-        session.addBooleanProperty("is_chosen");
+        session.addIntProperty("is_chosen");
+
+        Entity asset = schema.addEntity("Asset");
+        asset.addLongProperty("asset_id").primaryKey();
+        asset.addStringProperty("asset_code");
+        asset.addLongProperty("company_id");
+        asset.addLongProperty("department_id");
+        asset.addLongProperty("category_id");
+        asset.addLongProperty("sub_category_id");
+        asset.addLongProperty("warehouse_id");
+        asset.addStringProperty("seri");
+        asset.addStringProperty("warehouse_seri");
+        asset.addStringProperty("user_using");
+        asset.addStringProperty("name");
+        asset.addIntProperty("f_active");
+        asset.addStringProperty("created_at");
+        asset.addStringProperty("updated_at");
+        asset.addStringProperty("department_name");
+        asset.addLongProperty("session_id");
+        asset.addIntProperty("status");
 
         new DaoGenerator().generateAll(schema, args[0]);
     }

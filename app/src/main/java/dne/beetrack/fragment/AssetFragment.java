@@ -27,8 +27,10 @@ import dne.beetrack.adapter.AssetAdapter;
 import dne.beetrack.adapter.SimpleStringAdapter;
 import dne.beetrack.connection.Executor;
 import dne.beetrack.connection.callback.UICallback;
+import dne.beetrack.daocontroller.AssetController;
 import dne.beetrack.daocontroller.SessionController;
 import dne.beetrack.daocontroller.UserController;
+import greendao.Asset;
 import greendao.Session;
 
 /**
@@ -38,7 +40,6 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
 
     private ListView listView;
     private AssetAdapter adapter;
-    private List<String> listData;
 
     private LinearLayout lnlSession;
     private TextView txtSessionName;
@@ -63,15 +64,22 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
     }
 
     private void initData() {
-        listData = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            listData.add("");
-//        }
+        List<Asset> listData = new ArrayList<>();
 
         adapter = new AssetAdapter(getActivity(), listData);
         listView.setAdapter(adapter);
 
-        getListSession();
+        if (SessionController.getAll(getActivity()).size() == 0) {
+            getListSession();
+        } else {
+            Session session = SessionController.getSessionChosen(getActivity());
+            if (session != null) {
+                txtSessionName.setText(session.getName());
+                adapter.setListData(AssetController.getBySession(getActivity(), session.getSession_id()));
+            } else {
+                showListSession();
+            }
+        }
     }
 
     @Override
@@ -116,6 +124,8 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
 
     private void sessionChosen(Session session) {
         txtSessionName.setText(session.getName());
+        SessionController.setChosen(getActivity(), session);
+        getListAssetBySession(session.getSession_id());
     }
 
     private void getListSession() {
@@ -134,6 +144,24 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
             }
         };
         Executor.getListSession(getActivity(), callback, UserController.getCurrentUser(getActivity()).getAccount_id());
+        showProgressDialog(false);
+    }
+
+    private void getListAssetBySession(final long session_id) {
+        UICallback callback = new UICallback() {
+            @Override
+            public void onSuccess(String message) {
+                adapter.setListData(AssetController.getBySession(getActivity(), session_id));
+                hideProgressDialog();
+            }
+
+            @Override
+            public void onFail(String error) {
+                showToastError(error);
+                hideProgressDialog();
+            }
+        };
+        Executor.getListAssetBySession(getActivity(), callback, session_id);
         showProgressDialog(false);
     }
 }

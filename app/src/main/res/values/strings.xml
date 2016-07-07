@@ -11,6 +11,18 @@
     <string name="blank_username">Bạn chưa nhập username</string>
     <string name="blank_password">Bạn chưa nhập password</string>
 
+    <string name="barcode_not_found">Không tìm thấy, vui lòng thử lại</string>
+    <string name="asset_scan_already">Đã scan</string>
+
+    <string name="detail_seri">Số seri:</string>
+    <string name="detail_warehouse_seri">Số nhập kho:</string>
+    <string name="detail_status">Trạng thái:</string>
+    <string name="detail_note">Ghi chú tài sản:</string>
+
+
+
+
+
 
     <!--printer-->
     <string name="menu_settings">Settings</string>

@@ -26,6 +26,7 @@
             android:paddingRight="@dimen/dm_10dp">
 
             <TextView
+                android:id="@+id/txtAssetName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -35,6 +36,7 @@
                 android:textSize="@dimen/txt_15sp" />
 
             <TextView
+                android:id="@+id/txtAssetCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dm_2dp"
@@ -56,6 +58,7 @@
                     android:src="@drawable/ic_clock" />
 
                 <TextView
+                    android:id="@+id/txtTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dm_5dp"
@@ -67,6 +70,7 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/imvStatus"
             android:layout_width="@dimen/dm_30dp"
             android:layout_height="@dimen/dm_30dp"
             android:layout_gravity="center_vertical"
