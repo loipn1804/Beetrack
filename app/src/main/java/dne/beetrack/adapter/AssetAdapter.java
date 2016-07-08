@@ -66,6 +66,7 @@ public class AssetAdapter extends BaseAdapter {
             holder.txtAssetName = (TextView) convertView.findViewById(R.id.txtAssetName);
             holder.txtAssetCode = (TextView) convertView.findViewById(R.id.txtAssetCode);
             holder.txtTime = (TextView) convertView.findViewById(R.id.txtTime);
+            holder.txtScanned = (TextView) convertView.findViewById(R.id.txtScanned);
             holder.imvStatus = (ImageView) convertView.findViewById(R.id.imvStatus);
 
             convertView.setTag(holder);
@@ -78,8 +79,14 @@ public class AssetAdapter extends BaseAdapter {
         holder.txtTime.setText(listData.get(position).getCreated_at());
         if (listData.get(position).getStatus() == 1) {
             holder.imvStatus.setVisibility(View.VISIBLE);
+            holder.txtScanned.setVisibility(View.GONE);
         } else {
             holder.imvStatus.setVisibility(View.INVISIBLE);
+            if (listData.get(position).getIs_scan() == 1) {
+                holder.txtScanned.setVisibility(View.VISIBLE);
+            } else {
+                holder.txtScanned.setVisibility(View.GONE);
+            }
         }
 
         holder.root.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +106,7 @@ public class AssetAdapter extends BaseAdapter {
         TextView txtAssetName;
         TextView txtAssetCode;
         TextView txtTime;
+        TextView txtScanned;
         ImageView imvStatus;
     }
 }

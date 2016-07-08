@@ -51,6 +51,7 @@ public class MyDaoGenerator {
         asset.addStringProperty("department_name");
         asset.addLongProperty("session_id");
         asset.addIntProperty("status");
+        asset.addIntProperty("is_scan");
 
         new DaoGenerator().generateAll(schema, args[0]);
     }

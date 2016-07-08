@@ -40,6 +40,7 @@ public class AssetDao extends AbstractDao<Asset, Long> {
         public final static Property Department_name = new Property(14, String.class, "department_name", false, "DEPARTMENT_NAME");
         public final static Property Session_id = new Property(15, Long.class, "session_id", false, "SESSION_ID");
         public final static Property Status = new Property(16, Integer.class, "status", false, "STATUS");
+        public final static Property Is_scan = new Property(17, Integer.class, "is_scan", false, "IS_SCAN");
     };
 
 
@@ -71,7 +72,8 @@ public class AssetDao extends AbstractDao<Asset, Long> {
                 "'UPDATED_AT' TEXT," + // 13: updated_at
                 "'DEPARTMENT_NAME' TEXT," + // 14: department_name
                 "'SESSION_ID' INTEGER," + // 15: session_id
-                "'STATUS' INTEGER);"); // 16: status
+                "'STATUS' INTEGER," + // 16: status
+                "'IS_SCAN' INTEGER);"); // 17: is_scan
     }
 
     /** Drops the underlying database table. */
@@ -169,6 +171,11 @@ public class AssetDao extends AbstractDao<Asset, Long> {
         if (status != null) {
             stmt.bindLong(17, status);
         }
+ 
+        Integer is_scan = entity.getIs_scan();
+        if (is_scan != null) {
+            stmt.bindLong(18, is_scan);
+        }
     }
 
     /** @inheritdoc */
@@ -197,7 +204,8 @@ public class AssetDao extends AbstractDao<Asset, Long> {
             cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // updated_at
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // department_name
             cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15), // session_id
-            cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16) // status
+            cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16), // status
+            cursor.isNull(offset + 17) ? null : cursor.getInt(offset + 17) // is_scan
         );
         return entity;
     }
@@ -222,6 +230,7 @@ public class AssetDao extends AbstractDao<Asset, Long> {
         entity.setDepartment_name(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
         entity.setSession_id(cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15));
         entity.setStatus(cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16));
+        entity.setIs_scan(cursor.isNull(offset + 17) ? null : cursor.getInt(offset + 17));
      }
     
     /** @inheritdoc */

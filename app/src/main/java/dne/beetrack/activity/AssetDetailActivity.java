@@ -1,5 +1,6 @@
 package dne.beetrack.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -23,6 +24,7 @@ public class AssetDetailActivity extends MyBaseActivity implements View.OnClickL
     private TextView txtStatus;
     private TextView txtTime;
     private TextView txtNote;
+    private RelativeLayout rltPrint;
 
     private long asset_id;
 
@@ -43,7 +45,7 @@ public class AssetDetailActivity extends MyBaseActivity implements View.OnClickL
             finish();
         }
     }
-    
+
     private void initView() {
         rltBack = (RelativeLayout) findViewById(R.id.rltBack);
         txtAssetName = (TextView) findViewById(R.id.txtAssetName);
@@ -54,10 +56,12 @@ public class AssetDetailActivity extends MyBaseActivity implements View.OnClickL
         txtStatus = (TextView) findViewById(R.id.txtStatus);
         txtTime = (TextView) findViewById(R.id.txtTime);
         txtNote = (TextView) findViewById(R.id.txtNote);
+        rltPrint = (RelativeLayout) findViewById(R.id.rltPrint);
 
         rltBack.setOnClickListener(this);
+        rltPrint.setOnClickListener(this);
     }
-    
+
     private void initData() {
         Asset asset = AssetController.getById(this, asset_id);
         if (asset != null) {
@@ -78,6 +82,11 @@ public class AssetDetailActivity extends MyBaseActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.rltBack:
                 finish();
+                break;
+            case R.id.rltPrint:
+                Intent intent = new Intent(this, SamplePrintActivity.class);
+                intent.putExtra("code", txtId.getText().toString());
+                startActivity(intent);
                 break;
         }
     }

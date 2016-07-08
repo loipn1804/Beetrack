@@ -214,7 +214,7 @@ public class Executor {
                                     long session_id = data.getLong("session_id");
                                     int status = data.getInt("status");
 
-                                    Asset asset = new Asset(asset_id, asset_code, company_id, department_id, category_id, sub_category_id, warehouse_id, seri, warehouse_seri, user_using, name, f_active, created_at, updated_at, department_name, session_id, status);
+                                    Asset asset = new Asset(asset_id, asset_code, company_id, department_id, category_id, sub_category_id, warehouse_id, seri, warehouse_seri, user_using, name, f_active, created_at, updated_at, department_name, session_id, status, 0);
                                     AssetController.insertOrUpdate(context, asset);
                                 }
 

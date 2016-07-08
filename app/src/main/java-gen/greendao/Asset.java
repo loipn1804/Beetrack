@@ -23,6 +23,7 @@ public class Asset {
     private String department_name;
     private Long session_id;
     private Integer status;
+    private Integer is_scan;
 
     public Asset() {
     }
@@ -31,7 +32,7 @@ public class Asset {
         this.asset_id = asset_id;
     }
 
-    public Asset(Long asset_id, String asset_code, Long company_id, Long department_id, Long category_id, Long sub_category_id, Long warehouse_id, String seri, String warehouse_seri, String user_using, String name, Integer f_active, String created_at, String updated_at, String department_name, Long session_id, Integer status) {
+    public Asset(Long asset_id, String asset_code, Long company_id, Long department_id, Long category_id, Long sub_category_id, Long warehouse_id, String seri, String warehouse_seri, String user_using, String name, Integer f_active, String created_at, String updated_at, String department_name, Long session_id, Integer status, Integer is_scan) {
         this.asset_id = asset_id;
         this.asset_code = asset_code;
         this.company_id = company_id;
@@ -49,6 +50,7 @@ public class Asset {
         this.department_name = department_name;
         this.session_id = session_id;
         this.status = status;
+        this.is_scan = is_scan;
     }
 
     public Long getAsset_id() {
@@ -185,6 +187,14 @@ public class Asset {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getIs_scan() {
+        return is_scan;
+    }
+
+    public void setIs_scan(Integer is_scan) {
+        this.is_scan = is_scan;
     }
 
 }

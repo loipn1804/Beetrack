@@ -80,70 +80,27 @@ public class ScanFragment extends MyBaseFragment implements View.OnClickListener
     public void handleResult(Result result) {
         Asset asset = AssetController.getByBarcode(getActivity(), result.getContents());
         if (asset != null) {
-            if (asset.getStatus() == 1) {
+            if (asset.getIs_scan() == 1) {
                 showToastError(getString(R.string.asset_scan_already));
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mScannerView.resumeCameraPreview(ScanFragment.this);
-                    }
-                }, 2000);
+                resumeCamera();
             } else {
-                doScan(asset);
+                asset.setIs_scan(1);
+                AssetController.insertOrUpdate(getActivity(), asset);
+                showToastOk(getString(R.string.scan_success));
+                resumeCamera();
             }
         } else {
             showToastError(getString(R.string.barcode_not_found));
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScannerView.resumeCameraPreview(ScanFragment.this);
-                }
-            }, 2000);
+            resumeCamera();
         }
     }
 
-    private void doScan(final Asset asset) {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = calendar.getTime();
-        String scan_date = format.format(date);
-
-        JSONArray array = new JSONArray();
-        JSONObject object = new JSONObject();
-        try {
-            object.put("asset_id", asset.getAsset_id());
-            object.put("session_id", asset.getSession_id());
-            object.put("note", "");
-            object.put("scan_date", scan_date);
-            object.put("status", 1);
-
-            array.put(object);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        UICallback callback = new UICallback() {
+    private void resumeCamera() {
+        handler.postDelayed(new Runnable() {
             @Override
-            public void onSuccess(String message) {
-                showToastOk(message);
-                hideProgressDialog();
-                asset.setStatus(1);
-                AssetController.insertOrUpdate(getActivity(), asset);
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mScannerView.resumeCameraPreview(ScanFragment.this);
-                    }
-                }, 2000);
+            public void run() {
+                mScannerView.resumeCameraPreview(ScanFragment.this);
             }
-
-            @Override
-            public void onFail(String error) {
-                showToastError(error);
-                hideProgressDialog();
-            }
-        };
-        Executor.doScan(getActivity(), callback, UserController.getCurrentUser(getActivity()).getAccount_id(), array.toString());
-        showProgressDialog(false);
+        }, 1000);
     }
 }

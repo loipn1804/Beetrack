@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.brother.ptouch.sdk.Printer;
 import com.brother.ptouch.sdk.PrinterInfo;
@@ -35,6 +36,7 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
     private Button btnPrinter;
     private Button btnSetting;
     private RelativeLayout rltText;
+    private TextView txtToPrint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
         btnPrinter = (Button) findViewById(R.id.btnPrinter);
         btnSetting = (Button) findViewById(R.id.btnSetting);
         rltText = (RelativeLayout) findViewById(R.id.rltText);
+        txtToPrint = (TextView) findViewById(R.id.txtToPrint);
 
         btnPrinter.setOnClickListener(this);
         btnSetting.setOnClickListener(this);
@@ -56,6 +59,8 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
 
     private void initData() {
         setPrefereces();
+        String code = getIntent().getStringExtra("code");
+        txtToPrint.setText(code);
     }
 
     @Override

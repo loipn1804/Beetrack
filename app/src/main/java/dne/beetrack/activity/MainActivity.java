@@ -1,10 +1,14 @@
 package dne.beetrack.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -92,14 +96,49 @@ public class MainActivity extends MyBaseActivity implements View.OnClickListener
                 else showToastInfo("already");
                 break;
             case R.id.lnlReport:
-                if (CURRENT_MODE != REPORT)
+                if (CURRENT_MODE != REPORT) {
                     switchFragment(REPORT);
-                else showToastInfo("already");
+                }
                 break;
             case R.id.lnlExit:
-                logout();
+                showPopupConfirmLogout(getString(R.string.confirm_exit));
                 break;
         }
+    }
+
+    public void showPopupConfirmLogout(String message) {
+        // custom dialog
+        final Dialog dialog = new Dialog(this);
+
+//        dialog.getWindow().clearFlags(
+//                WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setContentView(R.layout.popup_confirm);
+
+        TextView txtMessage = (TextView) dialog.findViewById(R.id.txtMessage);
+        TextView txtOk = (TextView) dialog.findViewById(R.id.txtOk);
+        TextView txtCancel = (TextView) dialog.findViewById(R.id.txtCancel);
+        txtMessage.setText(message);
+
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        txtOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void logout() {

@@ -30,12 +30,12 @@
         android:background="@color/black"
         android:padding="2dp">
 
-        <EditText
+        <TextView
+            android:id="@+id/txtToPrint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:gravity="center"
-            android:hint="sample"
             android:padding="10dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black_77"

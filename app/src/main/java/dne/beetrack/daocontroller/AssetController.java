@@ -34,6 +34,14 @@ public class AssetController {
         return getDao(context).queryRaw(" WHERE session_id = ?", session_id + "");
     }
 
+    public static List<Asset> getAssetScannedBySession(Context context, long session_id) {
+        return getDao(context).queryRaw(" WHERE is_scan = ? AND session_id = ?", "1", session_id + "");
+    }
+
+    public static int getNumberScannedOfSession(Context context, long session_id) {
+        return getDao(context).queryRaw(" WHERE is_scan = ? AND session_id = ?", "1", session_id + "").size();
+    }
+
     public static Asset getByBarcode(Context context, String barcode) {
         Session session = SessionController.getSessionChosen(context);
         if (session != null) {

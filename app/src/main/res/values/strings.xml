@@ -5,6 +5,7 @@
     <string name="scan">Scan</string>
     <string name="report">Báo cáo</string>
     <string name="exit">Thoát</string>
+    <string name="confirm_exit">Bạn muốn thoát?</string>
 
     <string name="no_internet">No internet, please check your connection!</string>
 
@@ -13,11 +14,15 @@
 
     <string name="barcode_not_found">Không tìm thấy, vui lòng thử lại</string>
     <string name="asset_scan_already">Đã scan</string>
+    <string name="scan_success">OK</string>
+    <string name="scanned">Đã scan</string>
 
     <string name="detail_seri">Số seri:</string>
     <string name="detail_warehouse_seri">Số nhập kho:</string>
     <string name="detail_status">Trạng thái:</string>
     <string name="detail_note">Ghi chú tài sản:</string>
+
+    <string name="choose_session">Chọn session</string>
 
 
 

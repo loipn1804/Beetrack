@@ -4,8 +4,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/report" />
+    <LinearLayout
+        android:id="@+id/lnlSession"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/main_color"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtSessionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dm_5dp"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dm_5dp"
+            android:paddingRight="@dimen/dm_5dp"
+            android:singleLine="true"
+            android:text="@string/report"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 </LinearLayout>

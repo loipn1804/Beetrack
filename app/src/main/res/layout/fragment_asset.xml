@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/lnlSession"
@@ -34,10 +33,46 @@
             android:src="@drawable/ic_arrow_down_white_2" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/divider"
-        android:dividerHeight="1px"></ListView>
-</LinearLayout>
+        android:layout_below="@+id/lnlSession">
+
+        <dne.beetrack.view.ScrollInterfacedListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/divider"
+            android:dividerHeight="1px"></dne.beetrack.view.ScrollInterfacedListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/rltSubmit"
+        android:layout_width="@dimen/actionbar_height"
+        android:layout_height="@dimen/actionbar_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dm_10dp"
+        android:background="@drawable/btn_circle_main">
+
+        <ImageView
+            android:id="@+id/imvSubmit"
+            android:layout_width="@dimen/ac_imv_size"
+            android:layout_height="@dimen/ac_imv_size"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_submit" />
+
+        <TextView
+            android:id="@+id/txtSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imvSubmit"
+            android:layout_centerHorizontal="true"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_8sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</RelativeLayout>
