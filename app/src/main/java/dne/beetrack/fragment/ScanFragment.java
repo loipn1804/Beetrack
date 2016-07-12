@@ -78,6 +78,11 @@ public class ScanFragment extends MyBaseFragment implements View.OnClickListener
 
     @Override
     public void handleResult(Result result) {
+        if (result.getContents() == null) {
+            showToastError(getString(R.string.barcode_error));
+            resumeCamera();
+            return;
+        }
         Asset asset = AssetController.getByBarcode(getActivity(), result.getContents());
         if (asset != null) {
             if (asset.getIs_scan() == 1) {

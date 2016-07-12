@@ -2,10 +2,10 @@ package dne.beetrack.fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,14 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,10 +32,9 @@ import java.util.Date;
 import java.util.List;
 
 import dne.beetrack.R;
-import dne.beetrack.activity.MainActivity;
+import dne.beetrack.activity.FilterActivity;
 import dne.beetrack.adapter.AssetAdapter;
 import dne.beetrack.adapter.SessionAdapter;
-import dne.beetrack.adapter.SimpleStringAdapter;
 import dne.beetrack.connection.Executor;
 import dne.beetrack.connection.callback.UICallback;
 import dne.beetrack.daocontroller.AssetController;
@@ -52,6 +49,8 @@ import greendao.Session;
  */
 public class AssetFragment extends MyBaseFragment implements View.OnClickListener {
 
+    private int REQUEST_FILTER = 123;
+
     private SwipeRefreshLayout swipeRefreshLayout;
     private ScrollInterfacedListView listView;
     private AssetAdapter adapter;
@@ -59,8 +58,9 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
     private LinearLayout lnlSession;
     private TextView txtSessionName;
 
-    private RelativeLayout rltSubmit;
-    private TextView txtSubmit;
+    private FloatingActionButton btnSubmit;
+    private FloatingActionButton btnFilter;
+    private FloatingActionButton btnChangeSession;
 
     private boolean isPull;
 
@@ -81,8 +81,10 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
         listView = (ScrollInterfacedListView) view.findViewById(R.id.listView);
         lnlSession = (LinearLayout) view.findViewById(R.id.lnlSession);
         txtSessionName = (TextView) view.findViewById(R.id.txtSessionName);
-        rltSubmit = (RelativeLayout) view.findViewById(R.id.rltSubmit);
-        txtSubmit = (TextView) view.findViewById(R.id.txtSubmit);
+        btnSubmit = (FloatingActionButton) view.findViewById(R.id.btnSubmit);
+        btnFilter = (FloatingActionButton) view.findViewById(R.id.btnFilter);
+        btnChangeSession = (FloatingActionButton) view.findViewById(R.id.btnChangeSession);
+        
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.main_color);
 
@@ -100,32 +102,11 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
             }
         });
 
-        lnlSession.setOnClickListener(this);
-        rltSubmit.setOnClickListener(this);
+        swipeRefreshLayout.setRefreshing(true);
 
-        listView.setOnDetectScrollListener(new ScrollInterfacedListView.OnDetectScrollListener() {
-            @Override
-            public void onUpScrolling() {
-                if (rltSubmit.getVisibility() == View.INVISIBLE) {
-                    rltSubmit.setVisibility(View.VISIBLE);
-                    rltSubmit.setClickable(true);
-                    Animation a = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_add_btn_in);
-                    rltSubmit.setAnimation(a);
-                    a.start();
-                }
-            }
-
-            @Override
-            public void onDownScrolling() {
-                if (rltSubmit.getVisibility() == View.VISIBLE) {
-                    rltSubmit.setVisibility(View.INVISIBLE);
-                    rltSubmit.setClickable(false);
-                    Animation a = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_add_btn_out);
-                    rltSubmit.setAnimation(a);
-                    a.start();
-                }
-            }
-        });
+        btnSubmit.setOnClickListener(this);
+        btnFilter.setOnClickListener(this);
+        btnChangeSession.setOnClickListener(this);
     }
 
     private void initData() {
@@ -140,16 +121,9 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
             Session session = SessionController.getSessionChosen(getActivity());
             if (session != null) {
                 txtSessionName.setText(session.getName());
-                adapter.setListData(AssetController.getBySession(getActivity(), session.getSession_id()));
-                int numScanned = AssetController.getNumberScannedOfSession(getActivity(), session.getSession_id());
-                txtSubmit.setText(numScanned + "");
-//                if (numScanned == 0) {
-//                    rltSubmit.setVisibility(View.GONE);
-//                } else {
-//                    rltSubmit.setVisibility(View.VISIBLE);
-//                }
+//                adapter.setListData(AssetController.getBySession(getActivity(), session.getSession_id()));
+                adapter.setListData(AssetController.getBySessionFiltered(getActivity(), session.getSession_id()));
             } else {
-                rltSubmit.setVisibility(View.GONE);
                 showListSession();
             }
         }
@@ -158,15 +132,30 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.lnlSession:
-                showListSession();
-                break;
-            case R.id.rltSubmit:
+            case R.id.btnSubmit:
                 Session session = SessionController.getSessionChosen(getActivity());
                 if (session != null) {
                     submitScanned(session);
                 }
                 break;
+            case R.id.btnFilter:
+                Intent intentFilter = new Intent(getActivity(), FilterActivity.class);
+                startActivityForResult(intentFilter, REQUEST_FILTER);
+                break;
+            case R.id.btnChangeSession:
+                showListSession();
+                break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_FILTER && resultCode == getActivity().RESULT_OK) {
+            Session sessionChosen = SessionController.getSessionChosen(getActivity());
+            if (sessionChosen != null) {
+                adapter.setListData(AssetController.getBySessionFiltered(getActivity(), sessionChosen.getSession_id()));
+            }
         }
     }
 
@@ -181,6 +170,8 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
         dialog.setCanceledOnTouchOutside(true);
         dialog.setContentView(R.layout.popup_list_option);
 
+        TextView txtTitle = (TextView) dialog.findViewById(R.id.txtTitle);
+        txtTitle.setText(getString(R.string.choose_session));
         ListView listView = (ListView) dialog.findViewById(R.id.listView);
         SessionAdapter.Callback callback = new SessionAdapter.Callback() {
             @Override
@@ -237,18 +228,17 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
                 if (!isDestroyView()) {
                     txtSessionName.setText(session.getName());
                     SessionController.setChosen(getActivity(), session);
-                    adapter.setListData(AssetController.getBySession(getActivity(), session.getSession_id()));
-                    int numScanned = AssetController.getNumberScannedOfSession(getActivity(), session.getSession_id());
-                    txtSubmit.setText(numScanned + "");
-//                    if (numScanned == 0) {
-//                        rltSubmit.setVisibility(View.GONE);
-//                    } else {
-//                        rltSubmit.setVisibility(View.VISIBLE);
-//                    }
+//                    adapter.setListData(AssetController.getBySession(getActivity(), session.getSession_id()));
+                    adapter.setListData(AssetController.getBySessionFiltered(getActivity(), session.getSession_id()));
                     if (isPull) {
                         isPull = false;
                         swipeRefreshLayout.setRefreshing(false);
                     }
+
+                    SharedPreferences preferences = getActivity().getSharedPreferences("filter", getActivity().MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.clear();
+                    editor.commit();
                 }
                 hideProgressDialog();
             }

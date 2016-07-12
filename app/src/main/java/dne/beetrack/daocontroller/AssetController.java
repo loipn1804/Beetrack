@@ -1,7 +1,9 @@
 package dne.beetrack.daocontroller;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dne.beetrack.application.MyApplication;
@@ -32,6 +34,46 @@ public class AssetController {
 
     public static List<Asset> getBySession(Context context, long session_id) {
         return getDao(context).queryRaw(" WHERE session_id = ?", session_id + "");
+    }
+
+    public static List<Asset> getBySessionFiltered(Context context, long session_id) {
+        SharedPreferences preferences = context.getSharedPreferences("filter", context.MODE_PRIVATE);
+        boolean scanned = preferences.getBoolean("scanned", true);
+        boolean not_scan_yet = preferences.getBoolean("not_scan_yet", true);
+        long category_id = preferences.getLong("category_id", 0);
+        long sub_category_id = preferences.getLong("sub_category_id", 0);
+        long department_id = preferences.getLong("department_id", 0);
+        List<Asset> list = getDao(context).queryRaw(" WHERE session_id = ?", session_id + "");
+        List<Asset> listFiltered = new ArrayList<>();
+        for (Asset asset : list) {
+            if (!scanned) {
+                if (asset.getIs_scan() == 1 || asset.getStatus() == 1) {
+                    continue;
+                }
+            }
+            if (!not_scan_yet) {
+                if (asset.getIs_scan() == 0 && asset.getStatus() == 0) {
+                    continue;
+                }
+            }
+            if (category_id > 0) {
+                if (asset.getCategory_id() != category_id) {
+                    continue;
+                }
+            }
+            if (sub_category_id > 0) {
+                if (asset.getSub_category_id() != sub_category_id) {
+                    continue;
+                }
+            }
+            if (department_id > 0) {
+                if (asset.getDepartment_id() != department_id) {
+                    continue;
+                }
+            }
+            listFiltered.add(asset);
+        }
+        return listFiltered;
     }
 
     public static List<Asset> getAssetScannedBySession(Context context, long session_id) {

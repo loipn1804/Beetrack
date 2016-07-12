@@ -13,9 +13,11 @@
     <string name="blank_password">Bạn chưa nhập password</string>
 
     <string name="barcode_not_found">Không tìm thấy, vui lòng thử lại</string>
+    <string name="barcode_error">Barcode lỗi</string>
     <string name="asset_scan_already">Đã scan</string>
     <string name="scan_success">OK</string>
     <string name="scanned">Đã scan</string>
+    <string name="not_scan_yet">Chưa scan</string>
 
     <string name="detail_seri">Số seri:</string>
     <string name="detail_warehouse_seri">Số nhập kho:</string>
@@ -23,6 +25,14 @@
     <string name="detail_note">Ghi chú tài sản:</string>
 
     <string name="choose_session">Chọn session</string>
+
+    <string name="change_session">Đổi session</string>
+    <string name="filter">Lọc</string>
+    <string name="submit">Gửi asset đã scan</string>
+    <string name="department">Phòng ban</string>
+    <string name="category">Category</string>
+    <string name="sub_category">Sub Category</string>
+    <string name="all">Tất cả</string>
 
 
 

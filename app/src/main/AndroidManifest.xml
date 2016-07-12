@@ -39,6 +39,9 @@
         <activity
             android:name=".activity.SamplePrintActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.FilterActivity"
+            android:screenOrientation="portrait"></activity>
 
         <!--printer-->
         <activity

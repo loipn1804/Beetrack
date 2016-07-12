@@ -127,4 +127,48 @@ public class Api {
             callback.onFail(e.getMessage());
         }
     }
+
+    public void getListCategory(ApiCallback callback, long company_id) {
+        try {
+            String url = URL + "info/getCategories/" + company_id;
+            GenericUrl requestUrl = new GenericUrl(url);
+
+            HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
+
+            HttpRequest request = requestFactory.buildGetRequest(requestUrl);
+            request.setReadTimeout(TIME_OUT);
+            request.setConnectTimeout(TIME_OUT);
+
+            HttpResponse response = request.execute();
+            if (response.isSuccessStatusCode()) {
+                callback.onSuccess(response.parseAsString());
+            } else {
+                callback.onFail(response.getStatusCode() + ":" + response.getStatusMessage());
+            }
+        } catch (IOException e) {
+            callback.onFail(e.getMessage());
+        }
+    }
+
+    public void getListDepartment(ApiCallback callback, long company_id) {
+        try {
+            String url = URL + "info/getDepartments/" + company_id;
+            GenericUrl requestUrl = new GenericUrl(url);
+
+            HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
+
+            HttpRequest request = requestFactory.buildGetRequest(requestUrl);
+            request.setReadTimeout(TIME_OUT);
+            request.setConnectTimeout(TIME_OUT);
+
+            HttpResponse response = request.execute();
+            if (response.isSuccessStatusCode()) {
+                callback.onSuccess(response.parseAsString());
+            } else {
+                callback.onFail(response.getStatusCode() + ":" + response.getStatusMessage());
+            }
+        } catch (IOException e) {
+            callback.onFail(e.getMessage());
+        }
+    }
 }

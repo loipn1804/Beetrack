@@ -198,4 +198,8 @@ public class MainActivity extends MyBaseActivity implements View.OnClickListener
             txtReport.setTextColor(getResources().getColor(R.color.main_color));
         }
     }
+
+    private void fakeData() {
+
+    }
 }
