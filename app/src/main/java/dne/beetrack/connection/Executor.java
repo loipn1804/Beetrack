@@ -19,6 +19,7 @@ import dne.beetrack.daocontroller.DepartmentController;
 import dne.beetrack.daocontroller.SessionController;
 import dne.beetrack.daocontroller.SubCategoryController;
 import dne.beetrack.daocontroller.UserController;
+import dne.beetrack.daocontroller.WarehouseController;
 import dne.beetrack.staticfunction.StaticFunction;
 import greendao.Asset;
 import greendao.Category;
@@ -26,6 +27,7 @@ import greendao.Department;
 import greendao.Session;
 import greendao.SubCategory;
 import greendao.User;
+import greendao.Warehouse;
 
 /**
  * Created by loipn on 7/5/2016.
@@ -210,18 +212,28 @@ public class Executor {
 
                                     }
                                     String seri = data.getString("seri");
+                                    seri = seri.equals("null") ? "" : seri;
                                     String warehouse_seri = data.getString("warehouse_seri");
+                                    warehouse_seri = warehouse_seri.equals("null") ? "" : warehouse_seri;
                                     String user_using = data.getString("user_using");
+                                    user_using = user_using.equals("null") ? "" : user_using;
                                     String name = data.getString("name");
                                     int f_active = data.getInt("f_active");
                                     String created_at = data.getString("created_at");
                                     String updated_at = data.getString("updated_at");
                                     String department_name = data.getString("department_name");
+                                    department_name = department_name.equals("null") ? "" : department_name;
                                     long session_id = data.getLong("session_id");
                                     int status = data.getInt("status");
                                     int is_scan = 0;
+                                    String category_name = data.getString("category_name");
+                                    category_name = category_name.equals("null") ? "" : category_name;
+                                    String sub_category_name = data.getString("sub_category_name");
+                                    sub_category_name = sub_category_name.equals("null") ? "" : sub_category_name;
+                                    String warehouse_name = data.getString("warehouse_name");
+                                    warehouse_name = warehouse_name.equals("null") ? "" : warehouse_name;
 
-                                    Asset asset = new Asset(asset_id, asset_code, company_id, department_id, category_id, sub_category_id, warehouse_id, seri, warehouse_seri, user_using, name, f_active, created_at, updated_at, department_name, session_id, status, is_scan);
+                                    Asset asset = new Asset(asset_id, asset_code, company_id, department_id, category_id, sub_category_id, warehouse_id, seri, warehouse_seri, user_using, name, f_active, created_at, updated_at, department_name, session_id, status, is_scan, category_name, sub_category_name, warehouse_name);
                                     AssetController.insertOrUpdate(context, asset);
                                 }
 
@@ -468,6 +480,132 @@ public class Executor {
                 };
                 Api api = new Api();
                 api.getListDepartment(apiCallback, company_id);
+            }
+        });
+    }
+
+    public static void getListWarehouse(final Context context, final UICallback callback, final long company_id) {
+        if (!StaticFunction.isNetworkAvailable(context)) {
+            callback.onFail(context.getString(R.string.no_internet));
+            return;
+        }
+        BackgroundThreadExecutor.getInstance().runOnBackground(new Runnable() {
+            @Override
+            public void run() {
+                ApiCallback apiCallback = new ApiCallback() {
+                    @Override
+                    public void onSuccess(final String result) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            boolean success = jsonObject.getBoolean("success");
+                            final String message = jsonObject.getString("message");
+                            if (success) {
+                                JSONArray dataArr = jsonObject.getJSONArray("data");
+                                WarehouseController.clearAll(context);
+                                for (int i = 0; i < dataArr.length(); i++) {
+                                    JSONObject data = dataArr.getJSONObject(i);
+                                    long warehouse_id = data.getLong("warehouse_id");
+                                    String warehouse_code = data.getString("warehouse_code");
+                                    String warehouse_name = data.getString("name");
+
+                                    Warehouse warehouse = new Warehouse(warehouse_id, warehouse_code, warehouse_name);
+                                    WarehouseController.insertOrUpdate(context, warehouse);
+                                }
+
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onSuccess(message);
+                                    }
+                                });
+                            } else {
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onFail(message);
+                                    }
+                                });
+                            }
+                        } catch (final JSONException e) {
+                            e.printStackTrace();
+                            UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onFail(e.getMessage());
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFail(final String error) {
+                        UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onFail(error);
+                            }
+                        });
+                    }
+                };
+                Api api = new Api();
+                api.getListWarehouse(apiCallback, company_id);
+            }
+        });
+    }
+
+    public static void editAsset(final Context context, final UICallback callback, final long asset_id, final String field_name, final String data) {
+        if (!StaticFunction.isNetworkAvailable(context)) {
+            callback.onFail(context.getString(R.string.no_internet));
+            return;
+        }
+        BackgroundThreadExecutor.getInstance().runOnBackground(new Runnable() {
+            @Override
+            public void run() {
+                ApiCallback apiCallback = new ApiCallback() {
+                    @Override
+                    public void onSuccess(final String result) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            boolean success = jsonObject.getBoolean("success");
+                            final String message = jsonObject.getString("message");
+                            if (success) {
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onSuccess(message);
+                                    }
+                                });
+                            } else {
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onFail(message);
+                                    }
+                                });
+                            }
+                        } catch (final JSONException e) {
+                            e.printStackTrace();
+                            UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onFail(e.getMessage());
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFail(final String error) {
+                        UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onFail(error);
+                            }
+                        });
+                    }
+                };
+                Api api = new Api();
+                api.editAsset(apiCallback, asset_id, field_name, data);
             }
         });
     }

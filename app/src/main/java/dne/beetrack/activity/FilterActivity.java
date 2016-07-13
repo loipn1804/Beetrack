@@ -26,6 +26,7 @@ import dne.beetrack.daocontroller.DepartmentController;
 import dne.beetrack.daocontroller.SessionController;
 import dne.beetrack.daocontroller.SubCategoryController;
 import dne.beetrack.daocontroller.UserController;
+import dne.beetrack.staticfunction.StaticFunction;
 import dne.beetrack.view.MyCheckbox;
 import greendao.Category;
 import greendao.Department;
@@ -126,18 +127,9 @@ public class FilterActivity extends MyBaseActivity implements View.OnClickListen
                 showListSubCategory();
                 break;
             case R.id.btnOK:
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
                 finish();
                 break;
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-        finish();
     }
 
     private void getListDepartment() {
@@ -299,6 +291,7 @@ public class FilterActivity extends MyBaseActivity implements View.OnClickListen
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong("category_id", category_id);
         editor.commit();
+        StaticFunction.sendBroadCast(FilterActivity.this, StaticFunction.NOTIFY_LIST_ASSET);
     }
 
     private long getFilterSubCategory() {
@@ -311,6 +304,7 @@ public class FilterActivity extends MyBaseActivity implements View.OnClickListen
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong("sub_category_id", sub_category_id);
         editor.commit();
+        StaticFunction.sendBroadCast(FilterActivity.this, StaticFunction.NOTIFY_LIST_ASSET);
     }
 
     private long getFilterDepartment() {
@@ -323,6 +317,7 @@ public class FilterActivity extends MyBaseActivity implements View.OnClickListen
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong("department_id", department_id);
         editor.commit();
+        StaticFunction.sendBroadCast(FilterActivity.this, StaticFunction.NOTIFY_LIST_ASSET);
     }
 
     private boolean getFilterScanned() {
@@ -335,6 +330,7 @@ public class FilterActivity extends MyBaseActivity implements View.OnClickListen
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("scanned", scanned);
         editor.commit();
+        StaticFunction.sendBroadCast(FilterActivity.this, StaticFunction.NOTIFY_LIST_ASSET);
     }
 
     private boolean getFilterNotScanYet() {
@@ -347,5 +343,6 @@ public class FilterActivity extends MyBaseActivity implements View.OnClickListen
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("not_scan_yet", not_scan_yet);
         editor.commit();
+        StaticFunction.sendBroadCast(FilterActivity.this, StaticFunction.NOTIFY_LIST_ASSET);
     }
 }

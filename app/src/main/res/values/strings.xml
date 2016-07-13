@@ -19,9 +19,8 @@
     <string name="scanned">Đã scan</string>
     <string name="not_scan_yet">Chưa scan</string>
 
-    <string name="detail_seri">Số seri:</string>
-    <string name="detail_warehouse_seri">Số nhập kho:</string>
-    <string name="detail_status">Trạng thái:</string>
+    <string name="asset_name">Tên tài sản</string>
+    <string name="asset_code">Mã tài sản</string>
     <string name="detail_note">Ghi chú tài sản:</string>
 
     <string name="choose_session">Chọn session</string>
@@ -30,9 +29,17 @@
     <string name="filter">Lọc</string>
     <string name="submit">Gửi asset đã scan</string>
     <string name="department">Phòng ban</string>
+    <string name="warehouse">Kho</string>
+    <string name="warehouse_seri">Số nhập kho</string>
+    <string name="user_using">Người sử dụng</string>
+    <string name="seri">Số seri:</string>
+    <string name="status">Trạng thái:</string>
+
     <string name="category">Category</string>
     <string name="sub_category">Sub Category</string>
     <string name="all">Tất cả</string>
+    <string name="edit">Chỉnh sửa</string>
+    <string name="print">In</string>
 
 
 

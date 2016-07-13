@@ -14,7 +14,7 @@
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -59,26 +59,26 @@
                 <data android:mimeType="application/pdf"></data>
                 <data android:mimeType="application/octet-stream"></data>
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
 
-                <data android:mimeType="image/jpeg"></data>
-                <data android:mimeType="image/jpg"></data>
-                <data android:mimeType="image/bmp"></data>
-                <data android:mimeType="image/png"></data>
-                <data android:mimeType="application/pdf"></data>
-                <data android:mimeType="application/octet-stream"></data>
-            </intent-filter>
+                <!--<data android:mimeType="image/jpeg"></data>-->
+                <!--<data android:mimeType="image/jpg"></data>-->
+                <!--<data android:mimeType="image/bmp"></data>-->
+                <!--<data android:mimeType="image/png"></data>-->
+                <!--<data android:mimeType="application/pdf"></data>-->
+                <!--<data android:mimeType="application/octet-stream"></data>-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".print.Activity_PrintImage"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|fontScale|screenSize"
             android:label="@string/text_print_image">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity
@@ -101,10 +101,10 @@
             android:name=".print.Activity_FileList"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|fontScale|screenSize"
             android:label="@string/file_explorer_title">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.VIEW" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".print.Activity_Settings"

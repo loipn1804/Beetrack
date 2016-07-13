@@ -1,15 +1,16 @@
 package dne.beetrack.fragment;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +40,7 @@ import dne.beetrack.connection.callback.UICallback;
 import dne.beetrack.daocontroller.AssetController;
 import dne.beetrack.daocontroller.SessionController;
 import dne.beetrack.daocontroller.UserController;
+import dne.beetrack.staticfunction.StaticFunction;
 import dne.beetrack.view.ScrollInterfacedListView;
 import greendao.Asset;
 import greendao.Session;
@@ -48,8 +49,6 @@ import greendao.Session;
  * Created by USER on 06/16/2016.
  */
 public class AssetFragment extends MyBaseFragment implements View.OnClickListener {
-
-    private int REQUEST_FILTER = 123;
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ScrollInterfacedListView listView;
@@ -73,6 +72,8 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
 
         initView(view);
         initData();
+
+        registerReceiver();
 
         return view;
     }
@@ -140,22 +141,11 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
                 break;
             case R.id.btnFilter:
                 Intent intentFilter = new Intent(getActivity(), FilterActivity.class);
-                startActivityForResult(intentFilter, REQUEST_FILTER);
+                startActivity(intentFilter);
                 break;
             case R.id.btnChangeSession:
                 showListSession();
                 break;
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_FILTER && resultCode == getActivity().RESULT_OK) {
-            Session sessionChosen = SessionController.getSessionChosen(getActivity());
-            if (sessionChosen != null) {
-                adapter.setListData(AssetController.getBySessionFiltered(getActivity(), sessionChosen.getSession_id()));
-            }
         }
     }
 
@@ -339,4 +329,33 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
         Executor.doScan(getActivity(), callback, UserController.getCurrentUser(getActivity()).getAccount_id(), array.toString());
         showProgressDialog(false);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unRegisterReceiver();
+    }
+
+    private void registerReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(StaticFunction.NOTIFY_LIST_ASSET);
+        getActivity().registerReceiver(activityReceiver, intentFilter);
+    }
+
+    private void unRegisterReceiver() {
+        getActivity().unregisterReceiver(activityReceiver);
+    }
+
+    private BroadcastReceiver activityReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase(StaticFunction.NOTIFY_LIST_ASSET)) {
+                Session sessionChosen = SessionController.getSessionChosen(getActivity());
+                if (sessionChosen != null) {
+                    adapter.setListData(AssetController.getBySessionFiltered(getActivity(), sessionChosen.getSession_id()));
+                }
+            }
+        }
+    };
 }

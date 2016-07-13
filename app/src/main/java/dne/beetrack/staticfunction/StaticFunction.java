@@ -14,10 +14,18 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+
 import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * Created by USER on 4/22/2015.
@@ -133,9 +141,62 @@ public class StaticFunction {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    public static String NOTIFY_LIST_ASSET = "NOTIFY_LIST_ASSET";
+
     public static void sendBroadCast(Context context, String action) {
         Intent intent = new Intent();
         intent.setAction(action);
         context.sendBroadcast(intent);
+    }
+
+    public static Bitmap generateBarcodeBitmap(String contents, BarcodeFormat format, int img_width, int img_height) throws WriterException {
+        final int WHITE = 0x00000000;
+        final int BLACK = 0xFF000000;
+        final int GREY = 0xFFEEEEEE;
+
+        String contentsToEncode = contents;
+        if (contentsToEncode == null) {
+            return null;
+        }
+        Map<EncodeHintType, Object> hints = null;
+        String encoding = guessAppropriateEncoding(contentsToEncode);
+        if (encoding != null) {
+            hints = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+            hints.put(EncodeHintType.CHARACTER_SET, encoding);
+        }
+        MultiFormatWriter writer = new MultiFormatWriter();
+
+        BitMatrix result;
+        try {
+            result = writer.encode(contentsToEncode, format, img_width, img_height, hints);
+        } catch (IllegalArgumentException iae) {
+            // Unsupported format
+            return null;
+        }
+        int width = result.getWidth();
+        int height = result.getHeight();
+        int[] pixels = new int[width * height];
+        for (int y = 0; y < height; y++) {
+            int offset = y * width;
+            for (int x = 0; x < width; x++) {
+                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+
+            }
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+
+        return bitmap;
+    }
+
+    public static String guessAppropriateEncoding(CharSequence contents) {
+        // Very crude at the moment
+        for (int i = 0; i < contents.length(); i++) {
+            if (contents.charAt(i) > 0xFF) {
+                return "UTF-8";
+            }
+        }
+        return null;
     }
 }

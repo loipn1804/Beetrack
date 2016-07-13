@@ -171,4 +171,53 @@ public class Api {
             callback.onFail(e.getMessage());
         }
     }
+
+    public void getListWarehouse(ApiCallback callback, long company_id) {
+        try {
+            String url = URL + "info/getWarehouses/" + company_id;
+            GenericUrl requestUrl = new GenericUrl(url);
+
+            HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
+
+            HttpRequest request = requestFactory.buildGetRequest(requestUrl);
+            request.setReadTimeout(TIME_OUT);
+            request.setConnectTimeout(TIME_OUT);
+
+            HttpResponse response = request.execute();
+            if (response.isSuccessStatusCode()) {
+                callback.onSuccess(response.parseAsString());
+            } else {
+                callback.onFail(response.getStatusCode() + ":" + response.getStatusMessage());
+            }
+        } catch (IOException e) {
+            callback.onFail(e.getMessage());
+        }
+    }
+
+    public void editAsset(ApiCallback callback, long asset_id, String field_name, String data) {
+        try {
+            String url = URL + "asset/update";
+            GenericUrl requestUrl = new GenericUrl(url);
+
+            HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
+
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("asset_id", asset_id + "");
+            parameters.put(field_name, data);
+            HttpContent content = new UrlEncodedContent(parameters);
+
+            HttpRequest request = requestFactory.buildPostRequest(requestUrl, content);
+            request.setReadTimeout(TIME_OUT);
+            request.setConnectTimeout(TIME_OUT);
+
+            HttpResponse response = request.execute();
+            if (response.isSuccessStatusCode()) {
+                callback.onSuccess(response.parseAsString());
+            } else {
+                callback.onFail(response.getStatusCode() + ":" + response.getStatusMessage());
+            }
+        } catch (IOException e) {
+            callback.onFail(e.getMessage());
+        }
+    }
 }

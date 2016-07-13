@@ -41,6 +41,9 @@ public class AssetDao extends AbstractDao<Asset, Long> {
         public final static Property Session_id = new Property(15, Long.class, "session_id", false, "SESSION_ID");
         public final static Property Status = new Property(16, Integer.class, "status", false, "STATUS");
         public final static Property Is_scan = new Property(17, Integer.class, "is_scan", false, "IS_SCAN");
+        public final static Property Category_name = new Property(18, String.class, "category_name", false, "CATEGORY_NAME");
+        public final static Property Sub_category_name = new Property(19, String.class, "sub_category_name", false, "SUB_CATEGORY_NAME");
+        public final static Property Warehouse_name = new Property(20, String.class, "warehouse_name", false, "WAREHOUSE_NAME");
     };
 
 
@@ -73,7 +76,10 @@ public class AssetDao extends AbstractDao<Asset, Long> {
                 "'DEPARTMENT_NAME' TEXT," + // 14: department_name
                 "'SESSION_ID' INTEGER," + // 15: session_id
                 "'STATUS' INTEGER," + // 16: status
-                "'IS_SCAN' INTEGER);"); // 17: is_scan
+                "'IS_SCAN' INTEGER," + // 17: is_scan
+                "'CATEGORY_NAME' TEXT," + // 18: category_name
+                "'SUB_CATEGORY_NAME' TEXT," + // 19: sub_category_name
+                "'WAREHOUSE_NAME' TEXT);"); // 20: warehouse_name
     }
 
     /** Drops the underlying database table. */
@@ -176,6 +182,21 @@ public class AssetDao extends AbstractDao<Asset, Long> {
         if (is_scan != null) {
             stmt.bindLong(18, is_scan);
         }
+ 
+        String category_name = entity.getCategory_name();
+        if (category_name != null) {
+            stmt.bindString(19, category_name);
+        }
+ 
+        String sub_category_name = entity.getSub_category_name();
+        if (sub_category_name != null) {
+            stmt.bindString(20, sub_category_name);
+        }
+ 
+        String warehouse_name = entity.getWarehouse_name();
+        if (warehouse_name != null) {
+            stmt.bindString(21, warehouse_name);
+        }
     }
 
     /** @inheritdoc */
@@ -205,7 +226,10 @@ public class AssetDao extends AbstractDao<Asset, Long> {
             cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // department_name
             cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15), // session_id
             cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16), // status
-            cursor.isNull(offset + 17) ? null : cursor.getInt(offset + 17) // is_scan
+            cursor.isNull(offset + 17) ? null : cursor.getInt(offset + 17), // is_scan
+            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // category_name
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // sub_category_name
+            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20) // warehouse_name
         );
         return entity;
     }
@@ -231,6 +255,9 @@ public class AssetDao extends AbstractDao<Asset, Long> {
         entity.setSession_id(cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15));
         entity.setStatus(cursor.isNull(offset + 16) ? null : cursor.getInt(offset + 16));
         entity.setIs_scan(cursor.isNull(offset + 17) ? null : cursor.getInt(offset + 17));
+        entity.setCategory_name(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
+        entity.setSub_category_name(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setWarehouse_name(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
      }
     
     /** @inheritdoc */

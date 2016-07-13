@@ -22,6 +22,7 @@ import dne.beetrack.connection.callback.UICallback;
 import dne.beetrack.daocontroller.AssetController;
 import dne.beetrack.daocontroller.UserController;
 import greendao.Asset;
+import me.dm7.barcodescanner.zbar.BarcodeFormat;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 

@@ -1,61 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/listView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="@dimen/actionbar_height"
+        android:background="@color/main_color"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    </ListView>
-
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/floatingActionsMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/dm_10dp"
-        android:layout_marginEnd="@dimen/dm_10dp"
-        android:layout_marginRight="@dimen/dm_10dp"
-        fab:fab_addButtonColorNormal="@color/main_color"
-        fab:fab_addButtonColorPressed="@color/main_color_press"
-        fab:fab_addButtonPlusIconColor="@color/white"
-        fab:fab_addButtonSize="mini"
-        fab:fab_labelStyle="@style/menu_labels_style">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnSubmit"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_press"
-            fab:fab_icon="@drawable/ic_submit_4"
-            fab:fab_size="mini"
-            fab:fab_title="@string/submit" />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnFilter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_press"
-            fab:fab_icon="@drawable/ic_filter"
-            fab:fab_size="mini"
-            fab:fab_title="@string/filter" />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnChangeSession"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_press"
-            fab:fab_icon="@drawable/ic_change"
-            fab:fab_size="mini"
-            fab:fab_title="@string/change_session" />
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+            android:gravity="center"
+            android:paddingLeft="@dimen/dm_5dp"
+            android:paddingRight="@dimen/dm_5dp"
+            android:singleLine="true"
+            android:text="@string/report"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 </RelativeLayout>

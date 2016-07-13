@@ -24,6 +24,9 @@ public class Asset {
     private Long session_id;
     private Integer status;
     private Integer is_scan;
+    private String category_name;
+    private String sub_category_name;
+    private String warehouse_name;
 
     public Asset() {
     }
@@ -32,7 +35,7 @@ public class Asset {
         this.asset_id = asset_id;
     }
 
-    public Asset(Long asset_id, String asset_code, Long company_id, Long department_id, Long category_id, Long sub_category_id, Long warehouse_id, String seri, String warehouse_seri, String user_using, String name, Integer f_active, String created_at, String updated_at, String department_name, Long session_id, Integer status, Integer is_scan) {
+    public Asset(Long asset_id, String asset_code, Long company_id, Long department_id, Long category_id, Long sub_category_id, Long warehouse_id, String seri, String warehouse_seri, String user_using, String name, Integer f_active, String created_at, String updated_at, String department_name, Long session_id, Integer status, Integer is_scan, String category_name, String sub_category_name, String warehouse_name) {
         this.asset_id = asset_id;
         this.asset_code = asset_code;
         this.company_id = company_id;
@@ -51,6 +54,9 @@ public class Asset {
         this.session_id = session_id;
         this.status = status;
         this.is_scan = is_scan;
+        this.category_name = category_name;
+        this.sub_category_name = sub_category_name;
+        this.warehouse_name = warehouse_name;
     }
 
     public Long getAsset_id() {
@@ -195,6 +201,30 @@ public class Asset {
 
     public void setIs_scan(Integer is_scan) {
         this.is_scan = is_scan;
+    }
+
+    public String getCategory_name() {
+        return category_name;
+    }
+
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
+    }
+
+    public String getSub_category_name() {
+        return sub_category_name;
+    }
+
+    public void setSub_category_name(String sub_category_name) {
+        this.sub_category_name = sub_category_name;
+    }
+
+    public String getWarehouse_name() {
+        return warehouse_name;
+    }
+
+    public void setWarehouse_name(String warehouse_name) {
+        this.warehouse_name = warehouse_name;
     }
 
 }

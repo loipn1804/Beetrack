@@ -52,6 +52,9 @@ public class MyDaoGenerator {
         asset.addLongProperty("session_id");
         asset.addIntProperty("status");
         asset.addIntProperty("is_scan");
+        asset.addStringProperty("category_name");
+        asset.addStringProperty("sub_category_name");
+        asset.addStringProperty("warehouse_name");
 
         Entity category = schema.addEntity("Category");
         category.addLongProperty("category_id").primaryKey();
@@ -67,6 +70,11 @@ public class MyDaoGenerator {
         department.addStringProperty("department_code");
         department.addStringProperty("department_name");
         department.addStringProperty("description");
+
+        Entity warehouse = schema.addEntity("Warehouse");
+        warehouse.addLongProperty("warehouse_id").primaryKey();
+        warehouse.addStringProperty("warehouse_code");
+        warehouse.addStringProperty("warehouse_name");
 
         new DaoGenerator().generateAll(schema, args[0]);
     }

@@ -12,4 +12,33 @@
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="edt_edit_asset" parent="AppTheme">
+        <item name="android:singleLine">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/dm_10dp</item>
+        <item name="android:layout_marginRight">@dimen/dm_10dp</item>
+        <item name="android:textColorHint">@color/txt_black_55_hint</item>
+        <item name="android:textColor">@color/txt_black_33</item>
+        <item name="android:textSize">@dimen/txt_15sp</item>
+    </style>
+
+    <style name="txt_label_asset_detail" parent="AppTheme">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/txt_black_77</item>
+        <item name="android:textSize">@dimen/txt_12sp</item>
+        <item name="android:layout_marginTop">@dimen/dm_10dp</item>
+        <item name="android:layout_marginLeft">@dimen/dm_10dp</item>
+    </style>
+
+    <style name="txt_asset_detail" parent="AppTheme">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/txt_black_33</item>
+        <item name="android:textSize">@dimen/txt_15sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
 </resources>

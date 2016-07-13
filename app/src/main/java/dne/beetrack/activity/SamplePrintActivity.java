@@ -11,11 +11,14 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.brother.ptouch.sdk.Printer;
 import com.brother.ptouch.sdk.PrinterInfo;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,17 +28,20 @@ import dne.beetrack.print.Activity_PrintImage;
 import dne.beetrack.print.Activity_PrinterPreference;
 import dne.beetrack.print.common.Common;
 import dne.beetrack.print.printprocess.PrinterModelInfo;
+import dne.beetrack.staticfunction.StaticFunction;
 
 /**
  * Created by USER on 06/16/2016.
  */
 public class SamplePrintActivity extends MyBaseActivity implements View.OnClickListener {
 
-    private String NAME_PATH = "TestPrinter";
+    private String NAME_PATH = "Beetrack";
 
     private Button btnPrinter;
     private Button btnSetting;
-    private RelativeLayout rltText;
+
+    private RelativeLayout rltBarcode;
+    private ImageView imvBarcode;
     private TextView txtToPrint;
 
     @Override
@@ -50,7 +56,9 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
     private void initView() {
         btnPrinter = (Button) findViewById(R.id.btnPrinter);
         btnSetting = (Button) findViewById(R.id.btnSetting);
-        rltText = (RelativeLayout) findViewById(R.id.rltText);
+
+        rltBarcode = (RelativeLayout) findViewById(R.id.rltBarcode);
+        imvBarcode = (ImageView) findViewById(R.id.imvBarcode);
         txtToPrint = (TextView) findViewById(R.id.txtToPrint);
 
         btnPrinter.setOnClickListener(this);
@@ -61,6 +69,13 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
         setPrefereces();
         String code = getIntent().getStringExtra("code");
         txtToPrint.setText(code);
+
+        try {
+            imvBarcode.setImageBitmap(StaticFunction.generateBarcodeBitmap(code, BarcodeFormat.CODE_128, StaticFunction.getScreenWidth(this) * 3 / 4, StaticFunction.getScreenWidth(this) / 4));
+        } catch (WriterException e) {
+            e.printStackTrace();
+            showToastError(e.getMessage());
+        }
     }
 
     @Override
@@ -109,10 +124,10 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
     }
 
     private Bitmap convertViewToBitmap() {
-        rltText.setDrawingCacheEnabled(false);
-        rltText.destroyDrawingCache();
-        rltText.buildDrawingCache();
-        return rltText.getDrawingCache();
+        rltBarcode.setDrawingCacheEnabled(false);
+        rltBarcode.destroyDrawingCache();
+        rltBarcode.buildDrawingCache();
+        return rltBarcode.getDrawingCache();
     }
 
     private String saveBitmapToSDCard(Bitmap bitmap) {
