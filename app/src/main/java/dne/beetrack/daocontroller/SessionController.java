@@ -25,6 +25,10 @@ public class SessionController {
         }
     }
 
+    public static Session getById(Context context, long session_id) {
+        return getDao(context).loadByRowId(session_id);
+    }
+
     public static List<Session> getAll(Context context) {
         return getDao(context).loadAll();
     }

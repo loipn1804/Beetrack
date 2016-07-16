@@ -7,7 +7,6 @@ package greendao;
 public class Session {
 
     private Long session_id;
-    private Long account_id;
     private Long company_id;
     private String name;
     private String description;
@@ -15,6 +14,7 @@ public class Session {
     private String created_at;
     private String updated_at;
     private Integer is_chosen;
+    private Integer f_completed;
 
     public Session() {
     }
@@ -23,9 +23,8 @@ public class Session {
         this.session_id = session_id;
     }
 
-    public Session(Long session_id, Long account_id, Long company_id, String name, String description, String session_date, String created_at, String updated_at, Integer is_chosen) {
+    public Session(Long session_id, Long company_id, String name, String description, String session_date, String created_at, String updated_at, Integer is_chosen, Integer f_completed) {
         this.session_id = session_id;
-        this.account_id = account_id;
         this.company_id = company_id;
         this.name = name;
         this.description = description;
@@ -33,6 +32,7 @@ public class Session {
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.is_chosen = is_chosen;
+        this.f_completed = f_completed;
     }
 
     public Long getSession_id() {
@@ -41,14 +41,6 @@ public class Session {
 
     public void setSession_id(Long session_id) {
         this.session_id = session_id;
-    }
-
-    public Long getAccount_id() {
-        return account_id;
-    }
-
-    public void setAccount_id(Long account_id) {
-        this.account_id = account_id;
     }
 
     public Long getCompany_id() {
@@ -105,6 +97,14 @@ public class Session {
 
     public void setIs_chosen(Integer is_chosen) {
         this.is_chosen = is_chosen;
+    }
+
+    public Integer getF_completed() {
+        return f_completed;
+    }
+
+    public void setF_completed(Integer f_completed) {
+        this.f_completed = f_completed;
     }
 
 }

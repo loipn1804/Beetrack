@@ -9,7 +9,7 @@ public class MyDaoGenerator {
     public static Schema schema;
 
     public static void main(String args[]) throws Exception {
-        schema = new Schema(1, "greendao");
+        schema = new Schema(2, "greendao");
 
         Entity user = schema.addEntity("User");
         user.addLongProperty("account_id").primaryKey();
@@ -24,7 +24,6 @@ public class MyDaoGenerator {
 
         Entity session = schema.addEntity("Session");
         session.addLongProperty("session_id").primaryKey();
-        session.addLongProperty("account_id");
         session.addLongProperty("company_id");
         session.addStringProperty("name");
         session.addStringProperty("description");
@@ -32,6 +31,7 @@ public class MyDaoGenerator {
         session.addStringProperty("created_at");
         session.addStringProperty("updated_at");
         session.addIntProperty("is_chosen");
+        session.addIntProperty("f_completed");
 
         Entity asset = schema.addEntity("Asset");
         asset.addLongProperty("asset_id").primaryKey();

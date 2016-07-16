@@ -79,6 +79,77 @@ public class Api {
         }
     }
 
+    public void getListHistory(ApiCallback callback, long account_id) {
+        try {
+            String url = URL + "session/getAllHistory/" + account_id;
+            GenericUrl requestUrl = new GenericUrl(url);
+
+            HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
+
+            HttpRequest request = requestFactory.buildGetRequest(requestUrl);
+            request.setReadTimeout(TIME_OUT);
+            request.setConnectTimeout(TIME_OUT);
+
+            HttpResponse response = request.execute();
+            if (response.isSuccessStatusCode()) {
+                callback.onSuccess(response.parseAsString());
+            } else {
+                callback.onFail(response.getStatusCode() + ":" + response.getStatusMessage());
+            }
+        } catch (IOException e) {
+            callback.onFail(e.getMessage());
+        }
+    }
+
+    public void getSessionDetail(ApiCallback callback, long session_id) {
+        try {
+            String url = URL + "session/detail/" + session_id;
+            GenericUrl requestUrl = new GenericUrl(url);
+
+            HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
+
+            HttpRequest request = requestFactory.buildGetRequest(requestUrl);
+            request.setReadTimeout(TIME_OUT);
+            request.setConnectTimeout(TIME_OUT);
+
+            HttpResponse response = request.execute();
+            if (response.isSuccessStatusCode()) {
+                callback.onSuccess(response.parseAsString());
+            } else {
+                callback.onFail(response.getStatusCode() + ":" + response.getStatusMessage());
+            }
+        } catch (IOException e) {
+            callback.onFail(e.getMessage());
+        }
+    }
+
+    public void confirmSession(ApiCallback callback, long session_id, long account_id) {
+        try {
+            String url = URL + "session/confirm";
+            GenericUrl requestUrl = new GenericUrl(url);
+
+            HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
+
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("session_id", session_id + "");
+            parameters.put("account_id", account_id + "");
+            HttpContent content = new UrlEncodedContent(parameters);
+
+            HttpRequest request = requestFactory.buildPostRequest(requestUrl, content);
+            request.setReadTimeout(TIME_OUT);
+            request.setConnectTimeout(TIME_OUT);
+
+            HttpResponse response = request.execute();
+            if (response.isSuccessStatusCode()) {
+                callback.onSuccess(response.parseAsString());
+            } else {
+                callback.onFail(response.getStatusCode() + ":" + response.getStatusMessage());
+            }
+        } catch (IOException e) {
+            callback.onFail(e.getMessage());
+        }
+    }
+
     public void getListAssetBySession(ApiCallback callback, long session_id) {
         try {
             String url = URL + "asset/getBySession/" + session_id;

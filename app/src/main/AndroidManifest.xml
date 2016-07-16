@@ -42,6 +42,9 @@
         <activity
             android:name=".activity.FilterActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.SessionDetailActivity"
+            android:screenOrientation="portrait"></activity>
 
         <!--printer-->
         <activity

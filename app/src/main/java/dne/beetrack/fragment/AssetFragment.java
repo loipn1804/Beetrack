@@ -57,6 +57,7 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
     private LinearLayout lnlSession;
     private TextView txtSessionName;
 
+    private FloatingActionButton btnConfirm;
     private FloatingActionButton btnSubmit;
     private FloatingActionButton btnFilter;
     private FloatingActionButton btnChangeSession;
@@ -82,6 +83,7 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
         listView = (ScrollInterfacedListView) view.findViewById(R.id.listView);
         lnlSession = (LinearLayout) view.findViewById(R.id.lnlSession);
         txtSessionName = (TextView) view.findViewById(R.id.txtSessionName);
+        btnConfirm = (FloatingActionButton) view.findViewById(R.id.btnConfirm);
         btnSubmit = (FloatingActionButton) view.findViewById(R.id.btnSubmit);
         btnFilter = (FloatingActionButton) view.findViewById(R.id.btnFilter);
         btnChangeSession = (FloatingActionButton) view.findViewById(R.id.btnChangeSession);
@@ -105,6 +107,7 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
 
         swipeRefreshLayout.setRefreshing(true);
 
+        btnConfirm.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
         btnFilter.setOnClickListener(this);
         btnChangeSession.setOnClickListener(this);
@@ -133,10 +136,16 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btnConfirm:
+                Session session1 = SessionController.getSessionChosen(getActivity());
+                if (session1 != null) {
+                    confirmSession(session1.getSession_id());
+                }
+                break;
             case R.id.btnSubmit:
-                Session session = SessionController.getSessionChosen(getActivity());
-                if (session != null) {
-                    submitScanned(session);
+                Session session2 = SessionController.getSessionChosen(getActivity());
+                if (session2 != null) {
+                    submitScanned(session2);
                 }
                 break;
             case R.id.btnFilter:
@@ -190,6 +199,27 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
         } else {
             getListAssetBySession(session);
         }
+    }
+
+    private void confirmSession(long session_id) {
+        UICallback callback = new UICallback() {
+            @Override
+            public void onSuccess(String message) {
+//                showToastOk(message);
+//                hideProgressDialog();
+                List<Asset> list = new ArrayList<>();
+                adapter.setListData(list);
+                getListSession();
+            }
+
+            @Override
+            public void onFail(String error) {
+                showToastError(error);
+                hideProgressDialog();
+            }
+        };
+        Executor.confirmSession(getActivity(), callback, session_id, UserController.getCurrentUser(getActivity()).getAccount_id());
+        showProgressDialog(false);
     }
 
     private void getListSession() {

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/btn_white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dm_10dp">
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="session name"
+            android:textColor="@color/txt_black_33"
+            android:textSize="@dimen/txt_15sp" />
+
+        <TextView
+            android:id="@+id/txtDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dm_2dp"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="08-09-2016"
+            android:textColor="@color/txt_black_77"
+            android:textSize="@dimen/txt_12sp" />
+
+        <TextView
+            android:id="@+id/txtCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dm_2dp"
+            android:singleLine="true"
+            android:text="@string/completed"
+            android:textColor="@color/red"
+            android:textSize="@dimen/txt_12sp" />
+    </LinearLayout>
+</LinearLayout>

@@ -24,14 +24,14 @@ public class SessionDao extends AbstractDao<Session, Long> {
     */
     public static class Properties {
         public final static Property Session_id = new Property(0, Long.class, "session_id", true, "SESSION_ID");
-        public final static Property Account_id = new Property(1, Long.class, "account_id", false, "ACCOUNT_ID");
-        public final static Property Company_id = new Property(2, Long.class, "company_id", false, "COMPANY_ID");
-        public final static Property Name = new Property(3, String.class, "name", false, "NAME");
-        public final static Property Description = new Property(4, String.class, "description", false, "DESCRIPTION");
-        public final static Property Session_date = new Property(5, String.class, "session_date", false, "SESSION_DATE");
-        public final static Property Created_at = new Property(6, String.class, "created_at", false, "CREATED_AT");
-        public final static Property Updated_at = new Property(7, String.class, "updated_at", false, "UPDATED_AT");
-        public final static Property Is_chosen = new Property(8, Integer.class, "is_chosen", false, "IS_CHOSEN");
+        public final static Property Company_id = new Property(1, Long.class, "company_id", false, "COMPANY_ID");
+        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
+        public final static Property Description = new Property(3, String.class, "description", false, "DESCRIPTION");
+        public final static Property Session_date = new Property(4, String.class, "session_date", false, "SESSION_DATE");
+        public final static Property Created_at = new Property(5, String.class, "created_at", false, "CREATED_AT");
+        public final static Property Updated_at = new Property(6, String.class, "updated_at", false, "UPDATED_AT");
+        public final static Property Is_chosen = new Property(7, Integer.class, "is_chosen", false, "IS_CHOSEN");
+        public final static Property F_completed = new Property(8, Integer.class, "f_completed", false, "F_COMPLETED");
     };
 
 
@@ -48,14 +48,14 @@ public class SessionDao extends AbstractDao<Session, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'SESSION' (" + //
                 "'SESSION_ID' INTEGER PRIMARY KEY ," + // 0: session_id
-                "'ACCOUNT_ID' INTEGER," + // 1: account_id
-                "'COMPANY_ID' INTEGER," + // 2: company_id
-                "'NAME' TEXT," + // 3: name
-                "'DESCRIPTION' TEXT," + // 4: description
-                "'SESSION_DATE' TEXT," + // 5: session_date
-                "'CREATED_AT' TEXT," + // 6: created_at
-                "'UPDATED_AT' TEXT," + // 7: updated_at
-                "'IS_CHOSEN' INTEGER);"); // 8: is_chosen
+                "'COMPANY_ID' INTEGER," + // 1: company_id
+                "'NAME' TEXT," + // 2: name
+                "'DESCRIPTION' TEXT," + // 3: description
+                "'SESSION_DATE' TEXT," + // 4: session_date
+                "'CREATED_AT' TEXT," + // 5: created_at
+                "'UPDATED_AT' TEXT," + // 6: updated_at
+                "'IS_CHOSEN' INTEGER," + // 7: is_chosen
+                "'F_COMPLETED' INTEGER);"); // 8: f_completed
     }
 
     /** Drops the underlying database table. */
@@ -74,44 +74,44 @@ public class SessionDao extends AbstractDao<Session, Long> {
             stmt.bindLong(1, session_id);
         }
  
-        Long account_id = entity.getAccount_id();
-        if (account_id != null) {
-            stmt.bindLong(2, account_id);
-        }
- 
         Long company_id = entity.getCompany_id();
         if (company_id != null) {
-            stmt.bindLong(3, company_id);
+            stmt.bindLong(2, company_id);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(4, name);
+            stmt.bindString(3, name);
         }
  
         String description = entity.getDescription();
         if (description != null) {
-            stmt.bindString(5, description);
+            stmt.bindString(4, description);
         }
  
         String session_date = entity.getSession_date();
         if (session_date != null) {
-            stmt.bindString(6, session_date);
+            stmt.bindString(5, session_date);
         }
  
         String created_at = entity.getCreated_at();
         if (created_at != null) {
-            stmt.bindString(7, created_at);
+            stmt.bindString(6, created_at);
         }
  
         String updated_at = entity.getUpdated_at();
         if (updated_at != null) {
-            stmt.bindString(8, updated_at);
+            stmt.bindString(7, updated_at);
         }
  
         Integer is_chosen = entity.getIs_chosen();
         if (is_chosen != null) {
-            stmt.bindLong(9, is_chosen);
+            stmt.bindLong(8, is_chosen);
+        }
+ 
+        Integer f_completed = entity.getF_completed();
+        if (f_completed != null) {
+            stmt.bindLong(9, f_completed);
         }
     }
 
@@ -126,14 +126,14 @@ public class SessionDao extends AbstractDao<Session, Long> {
     public Session readEntity(Cursor cursor, int offset) {
         Session entity = new Session( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // session_id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // account_id
-            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // company_id
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // description
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // session_date
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // created_at
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // updated_at
-            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8) // is_chosen
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // company_id
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // description
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // session_date
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // created_at
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // updated_at
+            cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7), // is_chosen
+            cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8) // f_completed
         );
         return entity;
     }
@@ -142,14 +142,14 @@ public class SessionDao extends AbstractDao<Session, Long> {
     @Override
     public void readEntity(Cursor cursor, Session entity, int offset) {
         entity.setSession_id(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setAccount_id(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setCompany_id(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setDescription(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setSession_date(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setCreated_at(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setUpdated_at(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setIs_chosen(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
+        entity.setCompany_id(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setDescription(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setSession_date(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setCreated_at(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setUpdated_at(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setIs_chosen(cursor.isNull(offset + 7) ? null : cursor.getInt(offset + 7));
+        entity.setF_completed(cursor.isNull(offset + 8) ? null : cursor.getInt(offset + 8));
      }
     
     /** @inheritdoc */

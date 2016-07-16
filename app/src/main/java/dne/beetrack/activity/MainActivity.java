@@ -15,8 +15,12 @@ import android.widget.TextView;
 
 import dne.beetrack.R;
 import dne.beetrack.daocontroller.AssetController;
+import dne.beetrack.daocontroller.CategoryController;
+import dne.beetrack.daocontroller.DepartmentController;
 import dne.beetrack.daocontroller.SessionController;
+import dne.beetrack.daocontroller.SubCategoryController;
 import dne.beetrack.daocontroller.UserController;
+import dne.beetrack.daocontroller.WarehouseController;
 import dne.beetrack.fragment.AssetFragment;
 import dne.beetrack.fragment.ReportFragment;
 import dne.beetrack.fragment.ScanFragment;
@@ -145,6 +149,11 @@ public class MainActivity extends MyBaseActivity implements View.OnClickListener
         UserController.clearAll(this);
         SessionController.clearAll(this);
         AssetController.clearAll(this);
+        CategoryController.clearAll(this);
+        SubCategoryController.clearAll(this);
+        DepartmentController.clearAll(this);
+        WarehouseController.clearAll(this);
+
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();

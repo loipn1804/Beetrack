@@ -7,10 +7,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dne.beetrack.R;
 import dne.beetrack.activity.MainActivity;
 import dne.beetrack.connection.callback.ApiCallback;
 import dne.beetrack.connection.callback.UICallback;
+import dne.beetrack.connection.callback.UICallbackHistoryDetail;
+import dne.beetrack.connection.callback.UICallbackListHistory;
 import dne.beetrack.connection.thread.BackgroundThreadExecutor;
 import dne.beetrack.connection.thread.UIThreadExecutor;
 import dne.beetrack.daocontroller.AssetController;
@@ -20,6 +25,9 @@ import dne.beetrack.daocontroller.SessionController;
 import dne.beetrack.daocontroller.SubCategoryController;
 import dne.beetrack.daocontroller.UserController;
 import dne.beetrack.daocontroller.WarehouseController;
+import dne.beetrack.model.LostAsset;
+import dne.beetrack.model.SessionHistory;
+import dne.beetrack.model.SessionUser;
 import dne.beetrack.staticfunction.StaticFunction;
 import greendao.Asset;
 import greendao.Category;
@@ -126,15 +134,15 @@ public class Executor {
                                 for (int i = 0; i < dataArr.length(); i++) {
                                     JSONObject data = dataArr.getJSONObject(i);
                                     long session_id = data.getLong("session_id");
-                                    long account_id = data.getLong("account_id");
                                     long company_id = data.getLong("company_id");
                                     String name = data.getString("name");
                                     String description = data.getString("description");
                                     String session_date = data.getString("session_date");
                                     String created_at = data.getString("created_at");
                                     String updated_at = data.getString("updated_at");
+                                    int f_completed = data.getInt("f_completed");
 
-                                    Session session = new Session(session_id, account_id, company_id, name, description, session_date, created_at, updated_at, 0);
+                                    Session session = new Session(session_id, company_id, name, description, session_date, created_at, updated_at, 0, f_completed);
                                     SessionController.insertOrUpdate(context, session);
                                 }
 
@@ -175,6 +183,238 @@ public class Executor {
                 };
                 Api api = new Api();
                 api.getListSession(apiCallback, account_id);
+            }
+        });
+    }
+
+    public static void getListHistory(final Context context, final UICallbackListHistory callback, final long account_id) {
+        if (!StaticFunction.isNetworkAvailable(context)) {
+            callback.onFail(context.getString(R.string.no_internet));
+            return;
+        }
+        BackgroundThreadExecutor.getInstance().runOnBackground(new Runnable() {
+            @Override
+            public void run() {
+                ApiCallback apiCallback = new ApiCallback() {
+                    @Override
+                    public void onSuccess(final String result) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            boolean success = jsonObject.getBoolean("success");
+                            final String message = jsonObject.getString("message");
+                            if (success) {
+                                JSONArray dataArr = jsonObject.getJSONArray("data");
+                                final List<SessionHistory> sessionHistoryList = new ArrayList<>();
+                                for (int i = 0; i < dataArr.length(); i++) {
+                                    JSONObject data = dataArr.getJSONObject(i);
+                                    long session_id = data.getLong("session_id");
+                                    long company_id = data.getLong("company_id");
+                                    String name = data.getString("name");
+                                    String description = data.getString("description");
+                                    String session_date = data.getString("session_date");
+                                    String created_at = data.getString("created_at");
+                                    String updated_at = data.getString("updated_at");
+                                    int f_completed = data.getInt("f_completed");
+
+                                    SessionHistory sessionHistory = new SessionHistory(session_id, company_id, name, description, session_date, f_completed, created_at, updated_at, 0, 0, 0, null, null);
+                                    sessionHistoryList.add(sessionHistory);
+                                }
+
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onSuccess(message, sessionHistoryList);
+                                    }
+                                });
+                            } else {
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onFail(message);
+                                    }
+                                });
+                            }
+                        } catch (final JSONException e) {
+                            e.printStackTrace();
+                            UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onFail(e.getMessage());
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFail(final String error) {
+                        UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onFail(error);
+                            }
+                        });
+                    }
+                };
+                Api api = new Api();
+                api.getListHistory(apiCallback, account_id);
+            }
+        });
+    }
+
+    public static void getSessionDetail(final Context context, final UICallbackHistoryDetail callback, final long session_id) {
+        if (!StaticFunction.isNetworkAvailable(context)) {
+            callback.onFail(context.getString(R.string.no_internet));
+            return;
+        }
+        BackgroundThreadExecutor.getInstance().runOnBackground(new Runnable() {
+            @Override
+            public void run() {
+                ApiCallback apiCallback = new ApiCallback() {
+                    @Override
+                    public void onSuccess(final String result) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            boolean success = jsonObject.getBoolean("success");
+                            final String message = jsonObject.getString("message");
+                            if (success) {
+                                JSONObject data = jsonObject.getJSONObject("data");
+                                long session_id = data.getLong("session_id");
+                                long company_id = data.getLong("company_id");
+                                String name = data.getString("name");
+                                String description = data.getString("description");
+                                String session_date = data.getString("session_date");
+                                int f_completed = data.getInt("f_completed");
+                                String created_at = data.getString("created_at");
+                                String updated_at = data.getString("updated_at");
+                                int total_scanned = data.getInt("total_scanned");
+                                int total_assets = data.getInt("total_assets");
+
+                                JSONArray arrayUser = data.getJSONArray("users");
+                                List<SessionUser> sessionUserList = new ArrayList<>();
+                                for (int j = 0; j < arrayUser.length(); j++) {
+                                    JSONObject objUser = arrayUser.getJSONObject(j);
+                                    long account_id = objUser.getLong("account_id");
+                                    long department_id = objUser.getLong("department_id");
+                                    String name_user = objUser.getString("name");
+                                    String username = objUser.getString("username");
+                                    String email = objUser.getString("email");
+                                    String phone = objUser.getString("phone");
+                                    int f_completed_user = objUser.getInt("f_completed");
+
+                                    SessionUser sessionUser = new SessionUser(account_id, company_id, department_id, name_user, username, email, phone, f_completed_user);
+                                    sessionUserList.add(sessionUser);
+                                }
+
+                                int total_lost = 0;
+                                List<LostAsset> lostAssetList = new ArrayList<>();
+                                if (f_completed == 1) {
+                                    total_lost = data.getInt("total_lost");
+                                    JSONArray arrayAsset = data.getJSONArray("assets_lost");
+                                    for (int k = 0; k < arrayAsset.length(); k++) {
+                                        JSONObject asset = arrayAsset.getJSONObject(k);
+                                        String name_asset = asset.getString("name");
+                                        String asset_code = asset.getString("asset_code");
+
+                                        lostAssetList.add(new LostAsset(name_asset, asset_code));
+                                    }
+                                }
+
+                                final SessionHistory sessionHistory = new SessionHistory(session_id, company_id, name, description, session_date, f_completed, created_at, updated_at, total_scanned, total_assets, total_lost, sessionUserList, lostAssetList);
+
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onSuccess(message, sessionHistory);
+                                    }
+                                });
+                            } else {
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onFail(message);
+                                    }
+                                });
+                            }
+                        } catch (final JSONException e) {
+                            e.printStackTrace();
+                            UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onFail(e.getMessage());
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFail(final String error) {
+                        UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onFail(error);
+                            }
+                        });
+                    }
+                };
+                Api api = new Api();
+                api.getSessionDetail(apiCallback, session_id);
+            }
+        });
+    }
+
+    public static void confirmSession(final Context context, final UICallback callback, final long session_id, final long account_id) {
+        if (!StaticFunction.isNetworkAvailable(context)) {
+            callback.onFail(context.getString(R.string.no_internet));
+            return;
+        }
+        BackgroundThreadExecutor.getInstance().runOnBackground(new Runnable() {
+            @Override
+            public void run() {
+                ApiCallback apiCallback = new ApiCallback() {
+                    @Override
+                    public void onSuccess(final String result) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            boolean success = jsonObject.getBoolean("success");
+                            final String message = jsonObject.getString("message");
+                            if (success) {
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onSuccess(message);
+                                    }
+                                });
+                            } else {
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onFail(message);
+                                    }
+                                });
+                            }
+                        } catch (final JSONException e) {
+                            e.printStackTrace();
+                            UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onFail(e.getMessage());
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFail(final String error) {
+                        UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onFail(error);
+                            }
+                        });
+                    }
+                };
+                Api api = new Api();
+                api.confirmSession(apiCallback, session_id, account_id);
             }
         });
     }
