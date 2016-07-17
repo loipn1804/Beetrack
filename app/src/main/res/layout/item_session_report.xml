@@ -39,7 +39,7 @@
             android:layout_marginTop="@dimen/dm_2dp"
             android:singleLine="true"
             android:text="@string/completed"
-            android:textColor="@color/red"
+            android:textColor="@color/txt_black_55"
             android:textSize="@dimen/txt_12sp" />
     </LinearLayout>
 </LinearLayout>

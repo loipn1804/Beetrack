@@ -77,9 +77,9 @@ public class SessionReportAdapter extends BaseAdapter {
         holder.txtName.setText(listData.get(position).getName());
         holder.txtDate.setText(listData.get(position).getSession_date());
         if (listData.get(position).getF_completed() == 1) {
-            holder.txtCompleted.setVisibility(View.VISIBLE);
+            holder.txtCompleted.setText(activity.getString(R.string.completed));
         } else {
-            holder.txtCompleted.setVisibility(View.INVISIBLE);
+            holder.txtCompleted.setText(activity.getString(R.string.not_complete_yet));
         }
 
         holder.root.setOnClickListener(new View.OnClickListener() {

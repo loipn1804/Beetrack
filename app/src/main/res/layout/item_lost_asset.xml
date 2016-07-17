@@ -29,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dm_2dp"
+            android:paddingLeft="@dimen/dm_10dp"
             android:maxLines="1"
             android:text="0123456789"
             android:textColor="@color/txt_black_55"

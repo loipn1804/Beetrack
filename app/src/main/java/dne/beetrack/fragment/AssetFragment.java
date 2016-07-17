@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,6 +58,7 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
     private LinearLayout lnlSession;
     private TextView txtSessionName;
 
+    private FloatingActionsMenu floatingActionsMenu;
     private FloatingActionButton btnConfirm;
     private FloatingActionButton btnSubmit;
     private FloatingActionButton btnFilter;
@@ -83,11 +85,12 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
         listView = (ScrollInterfacedListView) view.findViewById(R.id.listView);
         lnlSession = (LinearLayout) view.findViewById(R.id.lnlSession);
         txtSessionName = (TextView) view.findViewById(R.id.txtSessionName);
+        floatingActionsMenu = (FloatingActionsMenu) view.findViewById(R.id.floatingActionsMenu);
         btnConfirm = (FloatingActionButton) view.findViewById(R.id.btnConfirm);
         btnSubmit = (FloatingActionButton) view.findViewById(R.id.btnSubmit);
         btnFilter = (FloatingActionButton) view.findViewById(R.id.btnFilter);
         btnChangeSession = (FloatingActionButton) view.findViewById(R.id.btnChangeSession);
-        
+
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.main_color);
 
@@ -137,25 +140,69 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnConfirm:
-                Session session1 = SessionController.getSessionChosen(getActivity());
-                if (session1 != null) {
-                    confirmSession(session1.getSession_id());
-                }
+                showPopupConfirmConfirmSession(getString(R.string.confirm_confirm));
+                floatingActionsMenu.collapse();
                 break;
             case R.id.btnSubmit:
                 Session session2 = SessionController.getSessionChosen(getActivity());
                 if (session2 != null) {
                     submitScanned(session2);
                 }
+                floatingActionsMenu.collapse();
                 break;
             case R.id.btnFilter:
                 Intent intentFilter = new Intent(getActivity(), FilterActivity.class);
                 startActivity(intentFilter);
+                floatingActionsMenu.collapse();
                 break;
             case R.id.btnChangeSession:
                 showListSession();
+                floatingActionsMenu.collapse();
                 break;
         }
+    }
+
+    public void showPopupConfirmConfirmSession(String message) {
+        // custom dialog
+        final Dialog dialog = new Dialog(getActivity());
+
+//        dialog.getWindow().clearFlags(
+//                WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setContentView(R.layout.popup_confirm);
+
+        TextView txtMessage = (TextView) dialog.findViewById(R.id.txtMessage);
+        TextView txtOk = (TextView) dialog.findViewById(R.id.txtOk);
+        TextView txtCancel = (TextView) dialog.findViewById(R.id.txtCancel);
+        txtMessage.setText(message);
+
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        txtOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Session session1 = SessionController.getSessionChosen(getActivity());
+                if (session1 != null) {
+                    int numScanned = AssetController.getNumberScannedOfSession(getActivity(), session1.getSession_id());
+                    if (numScanned == 0) {
+                        confirmSession(session1.getSession_id());
+                    } else {
+                        submitScannedBeforeConfirmSession(session1.getSession_id());
+                    }
+                }
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void showListSession() {
@@ -308,6 +355,45 @@ public class AssetFragment extends MyBaseFragment implements View.OnClickListene
             @Override
             public void onSuccess(String message) {
                 getListAssetBySession(sessionChange);
+            }
+
+            @Override
+            public void onFail(String error) {
+                showToastError(error);
+                hideProgressDialog();
+            }
+        };
+        Executor.doScan(getActivity(), callback, UserController.getCurrentUser(getActivity()).getAccount_id(), array.toString());
+        showProgressDialog(false);
+    }
+
+    private void submitScannedBeforeConfirmSession(final long session_id) {
+        List<Asset> list = AssetController.getAssetScannedBySession(getActivity(), session_id);
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = calendar.getTime();
+        String scan_date = format.format(date);
+
+        JSONArray array = new JSONArray();
+        for (Asset asset : list) {
+            JSONObject object = new JSONObject();
+            try {
+                object.put("asset_id", asset.getAsset_id());
+                object.put("session_id", asset.getSession_id());
+                object.put("note", "");
+                object.put("scan_date", scan_date);
+                object.put("status", 1);
+
+                array.put(object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        UICallback callback = new UICallback() {
+            @Override
+            public void onSuccess(String message) {
+                confirmSession(session_id);
             }
 
             @Override

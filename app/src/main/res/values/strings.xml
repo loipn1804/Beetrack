@@ -31,6 +31,7 @@
     <string name="filter">Lọc</string>
     <string name="submit">Gửi asset đã scan</string>
     <string name="confirm">Scan xong session này</string>
+    <string name="confirm_confirm">Bạn muốn xác nhận scan xong session này?</string>
     <string name="department">Phòng ban</string>
     <string name="warehouse">Kho</string>
     <string name="warehouse_seri">Số nhập kho</string>

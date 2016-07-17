@@ -58,7 +58,7 @@ public class ReportFragment extends MyBaseFragment implements View.OnClickListen
         UICallbackListHistory callback = new UICallbackListHistory() {
             @Override
             public void onSuccess(String message, List<SessionHistory> sessionHistoryList) {
-                showToastOk(message);
+//                showToastOk(message);
                 hideProgressDialog();
                 adapter = new SessionReportAdapter(getActivity(), sessionHistoryList);
                 listView.setAdapter(adapter);

@@ -79,6 +79,8 @@ public class SessionDetailActivity extends MyBaseActivity implements View.OnClic
         txtSessionDate.setText(getString(R.string.date) + ": " + sessionHistory.getSession_date());
         txtTotal.setText(getString(R.string.total_asset) + ": " + sessionHistory.getTotal_assets() + "");
         txtScanned.setText(getString(R.string.scanned) + ": " + sessionHistory.getTotal_scanned() + "");
+        txtUsers.setText(getString(R.string.user_scan));
+        txtLostAssets.setText(getString(R.string.list_lost_asset));
         setListUser(sessionHistory.getSessionUserList());
 
         if (sessionHistory.getF_completed() == 1) {
@@ -109,7 +111,7 @@ public class SessionDetailActivity extends MyBaseActivity implements View.OnClic
         for (SessionUser user : users) {
             View view = inflater.inflate(R.layout.item_user_of_session, null);
             TextView txtName = (TextView) view.findViewById(R.id.txtName);
-            txtName.setText(user.getName());
+            txtName.setText("- " + user.getName() + (user.getF_completed() == 1 ? " (xong)" : ""));
 
             lnlUsers.addView(view);
         }
@@ -124,7 +126,7 @@ public class SessionDetailActivity extends MyBaseActivity implements View.OnClic
             View view = inflater.inflate(R.layout.item_lost_asset, null);
             TextView txtAssetName = (TextView) view.findViewById(R.id.txtAssetName);
             TextView txtAssetCode = (TextView) view.findViewById(R.id.txtAssetCode);
-            txtAssetName.setText(asset.getName());
+            txtAssetName.setText("- " + asset.getName());
             txtAssetCode.setText(asset.getAsset_code());
 
             lnlLostAssets.addView(view);
