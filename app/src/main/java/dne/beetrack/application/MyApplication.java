@@ -1,11 +1,15 @@
 package dne.beetrack.application;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
+import com.crashlytics.android.Crashlytics;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -13,18 +17,21 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import greendao.DaoMaster;
 import greendao.DaoSession;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by USER on 3/3/2016.
  */
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 
     private String db_name = "qltsdb";
     public DaoSession daoSession;
 
     @Override
     public void onCreate() {
+        MultiDex.install(getApplicationContext());
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         int current_version = getAppVersionCode();
 
@@ -65,6 +72,12 @@ public class MyApplication extends Application {
                 .build();
         // Initialize ImageLoader with configuration.
         ImageLoader.getInstance().init(config);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     private void setupDatabase() {

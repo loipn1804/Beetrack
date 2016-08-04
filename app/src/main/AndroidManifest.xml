@@ -17,6 +17,7 @@
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
@@ -152,5 +153,8 @@
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|fontScale|screenSize"
             android:label="@string/text_printer_setting" />
         <!--printer-->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0913892b58865b329e1d1ee799ad71b0bd58dc68" />
     </application>
 </manifest>
