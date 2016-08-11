@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Beetrack</string>
+    <string name="app_name">Beetrack Dev</string>
+    <!--<string name="app_name">Beetrack</string>-->
 
     <string name="asset">Tài sản</string>
     <string name="scan">Scan</string>
@@ -50,6 +51,9 @@
     <string name="date">Ngày</string>
     <string name="user_scan">Người scan:</string>
     <string name="list_lost_asset">Danh sách tài sản mất:</string>
+
+    <string name="name_ts">Tên TS</string>
+    <string name="date_kk">Ngày KK</string>
 
 
 

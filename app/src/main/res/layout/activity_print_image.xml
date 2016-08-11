@@ -89,6 +89,7 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:background="@color/white"
         android:padding="5dp" />
 

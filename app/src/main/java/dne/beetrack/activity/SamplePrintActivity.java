@@ -22,13 +22,18 @@ import com.google.zxing.WriterException;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 
 import dne.beetrack.R;
+import dne.beetrack.connection.Executor;
+import dne.beetrack.connection.callback.UICallback;
+import dne.beetrack.daocontroller.AssetController;
 import dne.beetrack.print.Activity_PrintImage;
 import dne.beetrack.print.Activity_PrinterPreference;
 import dne.beetrack.print.common.Common;
 import dne.beetrack.print.printprocess.PrinterModelInfo;
 import dne.beetrack.staticfunction.StaticFunction;
+import greendao.Asset;
 
 /**
  * Created by USER on 06/16/2016.
@@ -43,6 +48,8 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
     private RelativeLayout rltBarcode;
     private ImageView imvBarcode;
     private TextView txtToPrint;
+    private TextView txtAssetName;
+    private TextView txtDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,8 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
         rltBarcode = (RelativeLayout) findViewById(R.id.rltBarcode);
         imvBarcode = (ImageView) findViewById(R.id.imvBarcode);
         txtToPrint = (TextView) findViewById(R.id.txtToPrint);
+        txtAssetName = (TextView) findViewById(R.id.txtAssetName);
+        txtDate = (TextView) findViewById(R.id.txtDate);
 
         btnPrinter.setOnClickListener(this);
         btnSetting.setOnClickListener(this);
@@ -69,9 +78,24 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
         setPrefereces();
         String code = getIntent().getStringExtra("code");
         txtToPrint.setText(code);
+        String name = getIntent().getStringExtra("name");
+        txtAssetName.setText(name);
+
+        SharedPreferences preferences = getSharedPreferences("date", MODE_PRIVATE);
+        String new_date = preferences.getString("new_date", "");
+        if (new_date.length() > 0) {
+            txtDate.setText(new_date);
+        } else {
+            getServerTime();
+        }
 
         try {
-            imvBarcode.setImageBitmap(StaticFunction.generateBarcodeBitmap(code, BarcodeFormat.CODE_128, StaticFunction.getScreenWidth(this) * 3 / 4, StaticFunction.getScreenWidth(this) / 4));
+            int barcode_width = StaticFunction.getScreenWidth(this) / 2;
+            if (barcode_width > 500) {
+                barcode_width = 500;
+            }
+            int barcode_height = barcode_width / 5;
+            imvBarcode.setImageBitmap(StaticFunction.generateBarcodeBitmap(code, BarcodeFormat.CODE_128, barcode_width, barcode_height));
         } catch (WriterException e) {
             e.printStackTrace();
             showToastError(e.getMessage());
@@ -92,6 +116,35 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
                 startActivity(intentSetting);
                 break;
         }
+    }
+
+    private void getServerTime() {
+        UICallback callback = new UICallback() {
+            @Override
+            public void onSuccess(String message) {
+                hideProgressDialog();
+                if (message.length() >= 10) {
+                    String date = message.substring(0, 10);
+                    String split[] = date.split("-");
+                    if (split.length >= 3) {
+                        String new_date = split[2] + "/" + split[1] + "/" + split[0];
+                        txtDate.setText(new_date);
+                        SharedPreferences preferences = getSharedPreferences("date", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("new_date", new_date);
+                        editor.commit();
+                    }
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+                showToastError(error);
+                hideProgressDialog();
+            }
+        };
+        Executor.getServerTime(this, callback);
+        showProgressDialog(false);
     }
 
     private class SaveImageAsync extends AsyncTask<Void, Void, String> {
@@ -127,7 +180,15 @@ public class SamplePrintActivity extends MyBaseActivity implements View.OnClickL
         rltBarcode.setDrawingCacheEnabled(false);
         rltBarcode.destroyDrawingCache();
         rltBarcode.buildDrawingCache();
-        return rltBarcode.getDrawingCache();
+        Bitmap bitmap = rltBarcode.getDrawingCache();
+        int width_old = bitmap.getWidth();
+        int height_old = bitmap.getHeight();
+        if (width_old > 600) {
+            int width_new = 600;
+            int height_new = height_old * 600 / width_old;
+            bitmap = Bitmap.createScaledBitmap(bitmap, width_new, height_new, false);
+        }
+        return bitmap;
     }
 
     private String saveBitmapToSDCard(Bitmap bitmap) {

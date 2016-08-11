@@ -291,4 +291,26 @@ public class Api {
             callback.onFail(e.getMessage());
         }
     }
+
+    public void getServerTime(ApiCallback callback) {
+        try {
+            String url = URL + "info/getServerTime";
+            GenericUrl requestUrl = new GenericUrl(url);
+
+            HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
+
+            HttpRequest request = requestFactory.buildGetRequest(requestUrl);
+            request.setReadTimeout(TIME_OUT);
+            request.setConnectTimeout(TIME_OUT);
+
+            HttpResponse response = request.execute();
+            if (response.isSuccessStatusCode()) {
+                callback.onSuccess(response.parseAsString());
+            } else {
+                callback.onFail(response.getStatusCode() + ":" + response.getStatusMessage());
+            }
+        } catch (IOException e) {
+            callback.onFail(e.getMessage());
+        }
+    }
 }

@@ -849,4 +849,62 @@ public class Executor {
             }
         });
     }
+
+    public static void getServerTime(final Context context, final UICallback callback) {
+        if (!StaticFunction.isNetworkAvailable(context)) {
+            callback.onFail(context.getString(R.string.no_internet));
+            return;
+        }
+        BackgroundThreadExecutor.getInstance().runOnBackground(new Runnable() {
+            @Override
+            public void run() {
+                ApiCallback apiCallback = new ApiCallback() {
+                    @Override
+                    public void onSuccess(final String result) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            boolean success = jsonObject.getBoolean("success");
+                            final String message = jsonObject.getString("message");
+                            final String data = jsonObject.getString("data");
+                            if (success) {
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onSuccess(data);
+                                    }
+                                });
+                            } else {
+                                UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        callback.onFail(message);
+                                    }
+                                });
+                            }
+                        } catch (final JSONException e) {
+                            e.printStackTrace();
+                            UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    callback.onFail(e.getMessage());
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFail(final String error) {
+                        UIThreadExecutor.getInstance().runOnUIThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onFail(error);
+                            }
+                        });
+                    }
+                };
+                Api api = new Api();
+                api.getServerTime(apiCallback);
+            }
+        });
+    }
 }

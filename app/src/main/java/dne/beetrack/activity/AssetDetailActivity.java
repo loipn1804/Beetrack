@@ -2,6 +2,7 @@ package dne.beetrack.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -139,6 +140,8 @@ public class AssetDetailActivity extends MyBaseActivity implements View.OnClickL
             txtUserUsing.setText(asset.getUser_using());
             txtSeri.setText(asset.getSeri());
             txtStatus.setText(asset.getF_active() == 1 ? "Active" : "Inactive");
+
+            getServerTime();
         } else {
             finish();
         }
@@ -153,6 +156,7 @@ public class AssetDetailActivity extends MyBaseActivity implements View.OnClickL
             case R.id.rltPrint:
                 Intent intent = new Intent(this, SamplePrintActivity.class);
                 intent.putExtra("code", AssetController.getById(this, asset_id).getAsset_code());
+                intent.putExtra("name", AssetController.getById(this, asset_id).getName());
                 startActivity(intent);
                 break;
             case R.id.imvAssetName:
@@ -549,5 +553,30 @@ public class AssetDetailActivity extends MyBaseActivity implements View.OnClickL
         };
         Executor.editAsset(this, callback, asset_id, getFieldParam(field), f_active + "");
         showProgressDialog(false);
+    }
+
+    private void getServerTime() {
+        UICallback callback = new UICallback() {
+            @Override
+            public void onSuccess(String message) {
+                if (message.length() >= 10) {
+                    String date = message.substring(0, 10);
+                    String split[] = date.split("-");
+                    if (split.length >= 3) {
+                        String new_date = split[2] + "/" + split[1] + "/" + split[0];
+                        SharedPreferences preferences = getSharedPreferences("date", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("new_date", new_date);
+                        editor.commit();
+                    }
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+
+            }
+        };
+        Executor.getServerTime(this, callback);
     }
 }

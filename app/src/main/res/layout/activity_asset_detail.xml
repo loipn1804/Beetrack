@@ -130,7 +130,8 @@
                         android:layout_width="@dimen/dm_30dp"
                         android:layout_height="@dimen/dm_30dp"
                         android:padding="@dimen/dm_2dp"
-                        android:src="@drawable/ic_edit_black" />
+                        android:src="@drawable/ic_edit_black"
+                        android:visibility="invisible" />
                 </LinearLayout>
 
                 <TextView
@@ -316,7 +317,8 @@
                         android:layout_width="@dimen/dm_30dp"
                         android:layout_height="@dimen/dm_30dp"
                         android:padding="@dimen/dm_2dp"
-                        android:src="@drawable/ic_edit_black" />
+                        android:src="@drawable/ic_edit_black"
+                        android:visibility="invisible" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
