@@ -24,12 +24,12 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dm_70dp"
+                android:layout_width="@dimen/dm_100dp"
+                android:layout_height="@dimen/dm_100dp"
                 android:layout_marginBottom="@dimen/dm_20dp"
-                android:layout_marginTop="@dimen/dm_70dp"
+                android:layout_marginTop="@dimen/dm_60dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/txt_qlts" />
+                android:src="@drawable/logo_login" />
 
             <LinearLayout
                 android:layout_width="match_parent"
