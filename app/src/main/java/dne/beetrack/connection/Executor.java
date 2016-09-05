@@ -444,7 +444,12 @@ public class Executor {
                                     long company_id = data.getLong("company_id");
                                     long department_id = data.getLong("department_id");
                                     long category_id = data.getLong("category_id");
-                                    long sub_category_id = data.getLong("sub_category_id");
+                                    long sub_category_id = 0;
+                                    try {
+                                        sub_category_id = data.getLong("sub_category_id");
+                                    } catch (JSONException wareEx) {
+
+                                    }
                                     long warehouse_id = 0;
                                     try {
                                         warehouse_id = data.getLong("warehouse_id");
@@ -605,11 +610,18 @@ public class Executor {
                                     JSONArray subCategoryArr = data.getJSONArray("sub_categories");
                                     for (int j = 0; j < subCategoryArr.length(); j++) {
                                         JSONObject subCategoryObj = subCategoryArr.getJSONObject(j);
-                                        long sub_category_id = subCategoryObj.getLong("sub_category_id");
+                                        long sub_category_id = 0;
+                                        try {
+                                            sub_category_id = subCategoryObj.getLong("sub_category_id");
+                                        } catch (JSONException wareEx) {
+
+                                        }
                                         String sub_category_name = subCategoryObj.getString("name");
 
-                                        SubCategory subCategory = new SubCategory(sub_category_id, category_id, sub_category_name);
-                                        SubCategoryController.insertOrUpdate(context, subCategory);
+                                        if (sub_category_id > 0) {
+                                            SubCategory subCategory = new SubCategory(sub_category_id, category_id, sub_category_name);
+                                            SubCategoryController.insertOrUpdate(context, subCategory);
+                                        }
                                     }
                                 }
 
